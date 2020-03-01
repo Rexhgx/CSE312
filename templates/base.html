@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link href="{% static "static/css/base.css"%}" rel="stylesheet" type="text/css">
+    {% block css %}
+    {% endblock %}
+</head>
+<body>
+    <div class="container">
+        <div class="user">
+            <div class="information">
+                <img class="profile_image"  src="{% static "static/image/chat_and_share.png"%}" alt="Profile Image">
+                <h4 class="username">Chat and Share</h4>
+            </div>
+            <div class="link">
+                <a href="{% url "Account:chat" %}" class="chat_link">
+                    <div class="chat_content">
+                        <img class="chat_icon" src="{% static "static/image/chat_icon.svg"%}" alt="Chat Icon">
+                        <span class="chat">chat</span>
+                    </div>
+                </a>
+                <a href="{% url "Account:share" %}" class="share_link">
+                    <div class="share_content">
+                        <img class="share_icon" src="{% static "static/image/share_icon.svg"%}" alt="Share Icon">
+                        <span class="share">share</span>
+                    </div>
+                </a>
+                <a href="{% url "Account:profile" %}" class="profile_link">
+                    <div class="profile_content">
+                        <img class="profile_icon" src="{% static "static/image/profile_icon.svg"%}" alt="Profile Icon">
+                        <span class="profile">profile</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

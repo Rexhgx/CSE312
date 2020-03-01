@@ -1,0 +1,203 @@
+.friends {
+    width: 300px;
+    height: 750px;
+    margin-left: 40px;
+}
+
+.friends_topbar{
+    width: 300px;
+    height: 80px;
+    display: flex;
+    padding: 0;
+}
+
+.friends_topbar_chat{
+    color: #5c5c5c;
+    margin-top: 30px;
+    margin-left: 10px;
+}
+
+.friends_topbar_add_new_friend{
+    opacity: 0.7;
+    width: 200px;
+    background-color: rgba(150, 196, 172, 0.67);
+    border: none;
+    outline: none;
+    box-shadow: 0 4px #999;
+    border-radius: 5px 5px 5px 5px;
+    margin: 35px 5px 15px 50px;
+    cursor: pointer;
+}
+
+.friends_topbar_add_new_friend span{
+    direction: ltr;
+    font-size: 12px;
+    color: #484848;
+}
+
+.friends_topbar_add_new_friend:active{
+    font-size: 15px;
+    color: #0d0d0d;
+    box-shadow: 0 1px #666;
+    transform: translateY(2px);
+}
+
+.friends_topbar_add_new_friend:active:after{
+    border: none;
+}
+
+.friends_topbar_add_new_friend:hover span{
+    font-size: 15px;
+    color: #0d0d0d;
+}
+
+.friends_searchbar {
+    position: relative;
+    display: block;
+    width: 300px;
+    height: 50px;
+    margin-top: 10px;
+}
+
+.friends_searchbar input[type=text] {
+    margin-left: 5px;
+    position: absolute;
+    right: 52px;
+    display: block;
+    width: 230px;
+    line-height: 50px;
+    font-size: 15px;
+    border: 0;
+    outline: 0;
+    border-radius: 15px;
+    padding-left: 10px;
+}
+
+.friends_searchbar button {
+    position: absolute;
+    right: 1px;
+    display: block;
+    width: 50px;
+    height: 53px;
+    outline: 0;
+    margin: 0;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.friends_searchbar button[type=submit]:hover {
+    border: 1px dotted gray;
+}
+
+.friends_information{
+    width: 300px;
+    height: 600px;
+    overflow: scroll;
+}
+
+.friends_drawer {
+    width: 300px;
+    margin-top: 20px;
+    height: 50px;
+    background: white;
+    padding: 0;
+    border-radius: 25px;
+    display: flex;
+    vertical-align: baseline;
+    transition: .3s ease;
+}
+
+.friends_drawer:hover {
+    background-color: rgba(150, 196, 172, 0.67);
+    cursor: pointer;
+}
+
+.text{
+    margin-left: 30px;
+}
+
+.text h6{
+    font-size: 20px;
+    margin-top: 15px;
+    color: #5c5c5c;
+}
+
+.text:hover h6 {
+    color: white;
+}
+
+.friend_photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+}
+
+.chat_box {
+    width: 800px;
+    height: 750px;
+    background-color: white;
+    margin-left: 40px;
+    border-radius: 25px;
+}
+
+.chat_box_topbar {
+    width: 100%;
+    height: 50px;
+    background-color: rgba(128, 128, 128, 0.11);
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    display: flex;
+}
+
+.chat_box_topbar_text{
+    margin-left: 30px;
+}
+
+.chat_box_topbar_text h6{
+    font-size: 20px;
+    margin-top: 15px;
+    color: #5c5c5c;
+}
+
+h6, div{
+    font-family: Arial, serif;
+}
+
+.chat_box_content {
+    width: 100%;
+    height: 500px;
+    border-bottom: 1px solid gray;
+    overflow: scroll;
+}
+
+.chat_box_bubble{
+    margin: 20px 30px;
+}
+
+.chat_bubble_left{
+    padding: 10px 14px;
+    background-color: rgba(128, 128, 128, 0.11);
+    border-radius: 15px 50px 30px 5px;
+    position: relative;
+    animation: fadeIn ease-in;
+    display: inline-block;
+}
+
+.chat_bubble_right{
+    padding: 10px 14px;
+    border-radius: 50px 15px 5px 30px;
+    position: absolute;
+    animation: fadeIn ease-in;
+    display: inline-block;
+    right: 50px;
+    background-color: rgba(150, 196, 172, 0.67);
+}
+
+.chat_box_message_input{
+    outline: 0;
+    border: none;
+    width: 600px;
+    margin: 40px;
+    font-size: 20px;
+}

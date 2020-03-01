@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link href="{% static "static/css/sign-in-sign-up.css"%}" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+        <h2 class="inactive underlineHover"> Sign In </h2>
+        <h2 class="active">Sign Up </h2>
+
+        <!-- Login Form -->
+        <form>
+            <input type="text" id="username" class="fadeIn second" name="username"  placeholder="username">
+            <input type="password" id="password" class="fadeIn third" name="password"  placeholder="password">
+            <input type="submit" class="fadeIn fourth" value="Sign up">
+        </form>
+
+    </div>
+</div>
+</body>
+</html>
