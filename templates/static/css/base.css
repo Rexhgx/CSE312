@@ -6,6 +6,10 @@ body {
     text-rendering: optimizeLegibility;
 }
 
+div{
+    font-family: Arial, serif;
+}
+
 .container {
     width: 1400px;
     height: 750px;

@@ -1,6 +1,133 @@
 .share_container {
     width: 1140px;
     height: 750px;
-    background: #ffffff;
     margin-left: 40px;
+}
+
+.share_topbar{
+    display: flex;
+    width: 100%;
+    height: 70px;
+}
+
+.share_topbar_share{
+    position: absolute;
+    margin-top: 21px;
+}
+
+.share_topbar_add_new_post{
+    position: absolute;
+    right: 50px;
+    opacity: 0.7;
+    width: 200px;
+    height: 30px;
+    background-color: rgba(150, 196, 172, 0.67);
+    border: none;
+    outline: none;
+    box-shadow: 0 4px #999;
+    border-radius: 5px 5px 5px 5px;
+    margin-top: 23px;
+    cursor: pointer;
+}
+
+.share_topbar_add_new_post span{
+    direction: ltr;
+    font-size: 12px;
+    color: #484848;
+}
+
+.share_topbar_add_new_post:active{
+    font-size: 15px;
+    color: #0d0d0d;
+    box-shadow: 0 1px #666;
+    transform: translateY(2px);
+}
+
+.share_topbar_add_new_post:active:after{
+    border: none;
+}
+
+.share_topbar_add_new_post:hover span{
+    font-size: 15px;
+    color: #0d0d0d;
+}
+
+.share_box_post{
+    width: 100%;
+    margin-top: 10px;
+    height: 120px;
+    background-color: white;
+    display: flex;
+    border-radius: 20px;
+}
+
+.share_box_user_photo{
+    margin-top: 10px;
+    margin-left: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 20px;
+}
+
+.share_box_post_photos{
+    margin: 10px;
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+}
+
+.share_box_post_text{
+    margin-left: 10px;
+}
+
+.share_box_post_text_username{
+    margin-top: 15px;
+    margin-left: 10px;
+    margin-bottom: 0;
+}
+
+.share_box_post_text_messages{
+    margin-top: 10px;
+    margin-left: 30px;
+}
+
+.share_box_post_photos_box{
+    margin-left: 20px;
+}
+
+.share_box_post_likes_comments{
+    width: 250px;
+    position: absolute;
+    right: 80px;
+}
+
+.share_box_post_likes{
+    display: flex;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+.share_box_post_likes_people{
+    margin-top: 0;
+    margin-left: 10px;
+}
+
+.share_box_post_comments{
+    display: flex;
+    margin-top: 0;
+    margin-right: 20px;
+}
+
+.share_box_post button{
+    display: table;
+    width: auto;
+    height: 20px;
+}
+
+.share_box_post_comments_box{
+    margin-left: 10px;
+}
+
+.share_box_post_comments_box p{
+    margin: 0;
 }
