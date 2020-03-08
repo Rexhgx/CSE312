@@ -4,7 +4,7 @@ body {
 }
 
 a {
-    color: #92badd;
+    color: #9cdda1;
     display:inline-block;
     text-decoration: none;
     font-weight: 400;
@@ -57,7 +57,7 @@ h2 {
 /* TABS */
 h2.active {
     color: #0d0d0d;
-    border-bottom: 2px solid #5fbae9;
+    border-bottom: 2px solid rgba(150, 196, 172, 0.67);
 }
 
 h2.inactive {
@@ -67,7 +67,7 @@ h2.inactive {
 /* FORM TYPOGRAPHY*/
 
 input[type=button], input[type=submit] {
-    background-color: #56baed;
+    background-color: rgba(150, 196, 172, 0.67);
     border: none;
     color: white;
     padding: 15px 80px;
@@ -76,20 +76,20 @@ input[type=button], input[type=submit] {
     display: inline-block;
     text-transform: uppercase;
     font-size: 13px;
+    font-weight: bold;
     -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
-    box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+    box-shadow: 0 10px 30px 0 rgba(150, 196, 172, 0.67);
     -webkit-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
     margin: 20px 20px 40px 20px;
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition: all 0.3s ease-in-out;
-    -ms-transition: all 0.3s ease-in-out;
     -o-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
 }
 
 input[type=button]:hover, input[type=submit]:hover  {
-    background-color: #39ace7;
+    background-color: rgba(89, 143, 95, 1);
 }
 
 input[type=button]:active, input[type=submit]:active {
@@ -122,7 +122,7 @@ input[type=text], input[type=password] {
 
 input[type=text]:focus, input[type=password]:focus {
     background-color: #fff;
-    border-bottom: 2px solid #5fbae9;
+    border-bottom: 2px solid rgba(89, 143, 95, 1);
 }
 
 input[type=text]::placeholder, input[type=password]::placeholder  {
@@ -176,7 +176,7 @@ input[type=text]::placeholder, input[type=password]::placeholder  {
     bottom: -10px;
     width: 0;
     height: 2px;
-    background-color: #56baed;
+    background-color: rgba(89, 143, 95, 1);
     content: "";
     transition: width 0.2s;
 }

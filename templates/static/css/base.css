@@ -1,9 +1,13 @@
 body {
-    background-image: url("../image/user_background.png");
+    background-image: url("../image/background.png");
     background-size: cover;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+}
+
+div{
+    font-family: Arial, serif;
 }
 
 .container {
