@@ -8,7 +8,7 @@
     <div class="share_container">
         <div class="share_topbar">
             <h1 class="share_topbar_share">Share</h1>
-            <button class="share_topbar_add_new_post"><span>+ Add New Post</span></button>
+            <button onclick="document.getElementById('modal').style.display='block'" class="share_topbar_add_new_post"><span>+ Add New Post</span></button>
         </div>
 
         <div class="share_box">
@@ -60,5 +60,19 @@
                 </div>
             </div>
         </div>
+    </div>
+{% endblock %}
+
+{% block hidden %}
+    <div id="modal" class="share_topbar_add_new_post_modal">
+      <span onclick="document.getElementById('modal').style.display='none'" class="close" title="Close Modal">×</span>
+      <form class="share_topbar_add_new_post_modal_content" action="">
+        <div class="share_topbar_add_new_post_modal_container">
+            <label for="text">Text:</label><br>
+            <textarea class="share_topbar_add_new_post_modal_container_input" id="text" name="text"></textarea><br>
+            <input class="share_topbar_add_new_post_modal_container_file" type="file">
+            <input class="share_topbar_add_new_post_modal_container_submit" type="submit" value="Post">
+        </div>
+      </form>
     </div>
 {% endblock %}
