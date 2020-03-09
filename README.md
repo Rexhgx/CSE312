@@ -34,10 +34,14 @@ ChatMe is a project that we built for CSE312. We developed website by utilizing 
 
 
 ```
-Give an example
+  Users can Add/Remove friends with other users
 ```
 
 ### Users can send direct messages to other users
+
+```
+  After 2 users are mutual friends with eachother, a private chat (only visible to two users) can be initiated
+```
 
 
 
