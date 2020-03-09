@@ -30,7 +30,7 @@ def sign_up(request):
         #     return render(request, 'Account/signupgoing.html', {'error_message': "The user already exists."})
         # User.objects.create(u_name=u_name, u_password=u_password)
         # response = redirect(reverse('Account:sign_up_success'))
-        return render(request, "sign-in.html")
+        return redirect(reverse('Account:sign_in'))
 
 
 def chat(request):
