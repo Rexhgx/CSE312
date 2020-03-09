@@ -8,7 +8,7 @@
     <div class="friends">
         <div class="friends_topbar">
             <h1 class="friends_topbar_chat">Chats</h1>
-            <button class="friends_topbar_add_new_friend"><span>+ Add New Friend</span></button>
+            <button onclick="document.getElementById('modal').style.display='block'" class="friends_topbar_add_new_friend"><span>+ Add New Friend</span></button>
         </div>
         <div class="friends_searchbar">
             <form action="">
@@ -67,5 +67,18 @@
                 <input class="chat_box_message_input" type="text" id="chat_box_message_input" placeholder="Let's chat.."/>
             </form>
         </div>
+    </div>
+{% endblock %}
+
+{% block hidden %}
+    <div id="modal" class="friends_topbar_add_new_friend_modal">
+      <span onclick="document.getElementById('modal').style.display='none'" class="close" title="Close Modal">×</span>
+      <form class="friends_topbar_add_new_friend_modal_content" action="">
+        <div class="friends_topbar_add_new_friend_modal_container">
+            <label for="username">Username:</label><br>
+            <input class="friends_topbar_add_new_friend_modal_container_input" type="text" id="username" name="username"><br>
+            <input class="friends_topbar_add_new_friend_modal_container_submit" type="submit" value="Submit">
+        </div>
+      </form>
     </div>
 {% endblock %}
