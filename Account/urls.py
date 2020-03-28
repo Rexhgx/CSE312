@@ -5,7 +5,6 @@ app_name = 'Account'
 urlpatterns = [
     path('sign_in/', views.sign_in, name='sign_in'),
     path('sign_up/', views.sign_up, name='sign_up'),
-    path('chat/', views.chat, name='chat'),
-    path('share/', views.share, name="share"),
-    path('profile/', views.profile, name="profile"),
+    path('<user_name>/chat/', views.chat, name='<user_name>/chat'),
+    path('<user_name>/profile/', views.profile, name="<user_name>/profile"),
 ]

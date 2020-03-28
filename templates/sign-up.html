@@ -23,6 +23,11 @@
             <input type="submit" class="fadeIn fourth" value="Sign up">
         </form>
 
+        <!-- Error Message -->
+        {% if error %}
+            <h4 class="error">{{ error }}</h4>
+        {% endif %}
+
     </div>
 </div>
 </body>

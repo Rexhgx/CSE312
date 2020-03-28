@@ -9,40 +9,43 @@
     {% endblock %}
 </head>
 <body>
-    <div class="container">
-        <div class="user">
-            <div class="information">
-                <img class="profile_image"  src="{% static "static/image/chat_and_share.png"%}" alt="Profile Image">
-                <h4 class="username">Chat and Share</h4>
+    {% if user_name %}
+        <div class="container">
+            <!-- User box (contain basic user information and links to chat/share/profile page -->
+            <div class="user">
+                <div class="information">
+                    <img class="profile_image"  src="{% static "static/image/chat_and_share.png"%}" alt="Profile Image">
+                    <h4 class="username">{{ user_name }}</h4>
+                </div>
+                <div class="link">
+                    <a href="{% url "Account:<user_name>/chat" user_name %}" class="chat_link">
+                        <div class="chat_content">
+                            <img class="chat_icon" src="{% static "static/image/chat_icon.svg"%}" alt="Chat Icon">
+                            <span class="chat">chat</span>
+                        </div>
+                    </a>
+                    <a href="{% url "Share:<user_name>/share" user_name %}" class="share_link">
+                        <div class="share_content">
+                            <img class="share_icon" src="{% static "static/image/share_icon.svg"%}" alt="Share Icon">
+                            <span class="share">share</span>
+                        </div>
+                    </a>
+                    <a href="{% url "Account:<user_name>/profile" user_name %}" class="profile_link">
+                        <div class="profile_content">
+                            <img class="profile_icon" src="{% static "static/image/profile_icon.svg"%}" alt="Profile Icon">
+                            <span class="profile">profile</span>
+                        </div>
+                    </a>
+                </div>
             </div>
-            <div class="link">
-                <a href="{% url "Account:chat" %}" class="chat_link">
-                    <div class="chat_content">
-                        <img class="chat_icon" src="{% static "static/image/chat_icon.svg"%}" alt="Chat Icon">
-                        <span class="chat">chat</span>
-                    </div>
-                </a>
-                <a href="{% url "Account:share" %}" class="share_link">
-                    <div class="share_content">
-                        <img class="share_icon" src="{% static "static/image/share_icon.svg"%}" alt="Share Icon">
-                        <span class="share">share</span>
-                    </div>
-                </a>
-                <a href="{% url "Account:profile" %}" class="profile_link">
-                    <div class="profile_content">
-                        <img class="profile_icon" src="{% static "static/image/profile_icon.svg"%}" alt="Profile Icon">
-                        <span class="profile">profile</span>
-                    </div>
-                </a>
-            </div>
+
+            {% block content %}
+            {% endblock %}
+
+            {% block hidden %}
+            {% endblock %}
         </div>
-
-        {% block content %}
-        {% endblock %}
-
-        {% block hidden %}
-        {% endblock %}
-    </div>
+    {% endif %}
 
     <script>
         const modal = document.getElementById('modal');
