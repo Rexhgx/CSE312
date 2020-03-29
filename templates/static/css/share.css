@@ -133,7 +133,7 @@
 }
 
 .share_topbar_add_new_post_modal{
-  display: none;
+  display: block;
   position: fixed;
   z-index: 1;
   left: 0;
@@ -168,12 +168,6 @@
     outline: 0;
     border-radius: 15px;
     padding-left: 10px;
-}
-
-.share_topbar_add_new_post_modal_container_submit{
-    width: 80px;
-    height: 20px;
-    margin: 10px;
 }
 
 .share_topbar_add_new_post_modal_container_submit{
@@ -222,4 +216,9 @@
 .close:focus {
   color: #f44336;
   cursor: pointer;
+}
+
+.error{
+    margin: 5px;
+    color: rgba(196, 28, 66, 0.67);
 }

@@ -8,71 +8,40 @@
     <div class="share_container">
         <div class="share_topbar">
             <h1 class="share_topbar_share">Share</h1>
-            <button onclick="document.getElementById('modal').style.display='block'" class="share_topbar_add_new_post"><span>+ Add New Post</span></button>
+            <button onclick="location.href='{% url 'Share:<user_name>/share/post' user_name %}'" class="share_topbar_add_new_post"><span>+ New Post</span></button>
         </div>
 
         <div class="share_box">
-            <div class="share_box_post">
-                <div class="share_box_post_user">
-                    <img src="{% static "static/image/profile_photo_2.jpeg"%}" alt="User Photo" class="share_box_user_photo">
-                </div>
-                <div class="share_box_post_text">
-                    <h4 class="share_box_post_text_username">Jackson:</h4>
-                    <p class="share_box_post_text_messages">Pizza Day!</p>
-                </div>
-                <div class="share_box_post_photos_box">
-                    <img src="{% static "static/image/pizza.jpeg"%}" alt="Post Photo" class="share_box_post_photos">
-                </div>
-                <div class="share_box_post_likes_comments">
-                    <div class="share_box_post_likes">
-                        <button class="share_box_post_button">Like</button>
-                        <p class="share_box_post_likes_people">Tim</p>
+            {% for post in post_list %}
+                <div class="share_box_post">
+                    <div class="share_box_post_user">
+                        <img src="{% static "static/image/profile_photo_2.jpeg"%}" alt="User Photo" class="share_box_user_photo">
                     </div>
-                    <div class="share_box_post_comments">
-                        <button>Comment</button>
-                        <div class="share_box_post_comments_box">
-                            <p>Tim: Looks Nice!</p>
+                    <div class="share_box_post_text">
+                        <h4 class="share_box_post_text_username"></h4>
+                        <p class="share_box_post_text_messages">{{ post.post_text }}</p>
+                    </div>
+                    <div class="share_box_post_photos_box">
+                        <img src="{% static "static/image/pizza.jpeg"%}" alt="Post Photo" class="share_box_post_photos">
+                    </div>
+                    <div class="share_box_post_likes_comments">
+                        <div class="share_box_post_likes">
+                            <button class="share_box_post_button">Like</button>
+                            <p class="share_box_post_likes_people">Tim</p>
+                        </div>
+                        <div class="share_box_post_comments">
+                            <button>Comment</button>
+                            <div class="share_box_post_comments_box">
+                                <p>Tim: Looks Nice!</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="share_box_post">
-                <div class="share_box_post_user">
-                    <img src="{% static "static/image/profile_photo_1.jpeg"%}" alt="User Photo" class="share_box_user_photo">
-                </div>
-                <div class="share_box_post_text">
-                    <h4 class="share_box_post_text_username">Tim:</h4>
-                    <p class="share_box_post_text_messages">Go Lackers!</p>
-                </div>
-                <div class="share_box_post_photos_box">
-                    <img src="{% static "static/image/Paul_George.jpeg"%}" alt="Post Photo" class="share_box_post_photos">
-                </div>
-                <div class="share_box_post_likes_comments">
-                    <div class="share_box_post_likes">
-                        <button class="share_box_post_button">Like</button>
-                        <p class="share_box_post_likes_people">Willam</p>
-                    </div>
-                    <div class="share_box_post_comments">
-                        <button>Comment</button>
-                        <div class="share_box_post_comments_box">
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% empty %}
+                <p class="error">Oops, there is not post!</p>
+            {% endfor %}
         </div>
     </div>
-{% endblock %}
-
-{% block hidden %}
-    <div id="modal" class="share_topbar_add_new_post_modal">
-      <span onclick="document.getElementById('modal').style.display='none'" class="close" title="Close Modal">×</span>
-      <form class="share_topbar_add_new_post_modal_content" action="">
-        <div class="share_topbar_add_new_post_modal_container">
-            <label for="text">Text:</label><br>
-            <textarea class="share_topbar_add_new_post_modal_container_input" id="text" name="text"></textarea><br>
-            <input class="share_topbar_add_new_post_modal_container_file" type="file">
-            <input class="share_topbar_add_new_post_modal_container_submit" type="submit" value="Post">
-        </div>
-      </form>
-    </div>
+    {% block hidden %}
+    {% endblock %}
 {% endblock %}
