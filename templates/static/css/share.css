@@ -105,6 +105,8 @@
     display: flex;
     margin-top: 10px;
     margin-right: 20px;
+    width: 200px;
+    overflow: auto;
 }
 
 .share_box_post_likes_people{
@@ -126,14 +128,17 @@
 
 .share_box_post_comments_box{
     margin-left: 10px;
+    height: 50px;
+    width: 200px;
+    overflow: auto;
 }
 
 .share_box_post_comments_box p{
     margin: 0;
+
 }
 
 .share_topbar_add_new_post_modal{
-  display: block;
   position: fixed;
   z-index: 1;
   left: 0;
@@ -145,7 +150,7 @@
   padding-top: 50px;
 }
 
-.share_topbar_add_new_post_modal_content {
+.share_topbar_add_new_post_modal_content, .comment {
     background-color: #fefefe;
     margin: 5% auto 15% auto;
     border: 1px solid #888;
@@ -154,13 +159,13 @@
     height: 230px;
 }
 
-.share_topbar_add_new_post_modal_container{
+.share_topbar_add_new_post_modal_container, .comment_text{
     margin-top: 10px;
     padding: 16px;
     text-align: center;
 }
 
-.share_topbar_add_new_post_modal_container_input{
+.share_topbar_add_new_post_modal_container_input, .comment_input{
     width: 300px;
     height: 80px;
     line-height: 30px;
@@ -170,7 +175,7 @@
     padding-left: 10px;
 }
 
-.share_topbar_add_new_post_modal_container_submit{
+.share_topbar_add_new_post_modal_container_submit, .comment_submit{
     opacity: 0.7;
     width: 150px;
     height: 30px;
@@ -182,20 +187,20 @@
     cursor: pointer;
 }
 
-.share_topbar_add_new_post_modal_container_submit span{
+.share_topbar_add_new_post_modal_container_submit, .comment_submit span{
     direction: ltr;
     font-size: 12px;
     color: #484848;
 }
 
-.share_topbar_add_new_post_modal_container_submit:active{
+.share_topbar_add_new_post_modal_container_submit:active, .comment_submit:active{
     font-size: 15px;
     color: #0d0d0d;
     box-shadow: 0 1px #666;
     transform: translateY(2px);
 }
 
-.share_topbar_add_new_post_modal_container_submit:active:after{
+.share_topbar_add_new_post_modal_container_submit:active:after, .comment_submit:after{
     border: none;
 }
 

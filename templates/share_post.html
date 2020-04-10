@@ -1,30 +1,20 @@
 {% extends "share.html" %}
 
 {% block hidden %}
-    <div id="modal" class="share_topbar_add_new_post_modal">
+    <div id="modal" class="share_topbar_add_new_post_modal" style="display: block">
       <span onclick="location.href='{% url 'Share:<user_name>/share' user_name %}'" class="close" title="Close Modal">×</span>
-      <form class="share_topbar_add_new_post_modal_content" action="{% url "Share:<user_name>/share/post" user_name %}" method="post">
+      <form class="share_topbar_add_new_post_modal_content" action="{% url "Share:<user_name>/share/post" user_name %}" method="post" enctype="multipart/form-data">
           {% csrf_token %}
         <div class="share_topbar_add_new_post_modal_container">
             <label for="post_text">Text:</label><br>
             <textarea class="share_topbar_add_new_post_modal_container_input" id="post_text" name="post_text"></textarea><br>
-            <input class="share_topbar_add_new_post_modal_container_file" type="file" id="post_photo" name="post_photo">
+            <input class="share_topbar_add_new_post_modal_container_file" type="file" id="post_photo" name="post_photo" accept="image/*">
             <input class="share_topbar_add_new_post_modal_container_submit" type="submit" value="Post">
+        {{ post_form }}
             {% if error %}
                 <h4 class="error">{{ error }}</h4>
             {% endif %}
         </div>
       </form>
     </div>
-{% endblock %}
-
-{% block javascript %}
-        <script>
-            const modal = document.getElementById('modal');
-            window.onclick = function(event) {
-              if (event.target === modal) {
-                location.href='{% url 'Share:<user_name>/share' user_name %}'
-              }
-            }
-        </script>
 {% endblock %}

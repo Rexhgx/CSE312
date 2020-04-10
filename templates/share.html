@@ -13,30 +13,52 @@
 
         <div class="share_box">
             {% for post in post_list %}
-                <div class="share_box_post">
+                <div class="share_box_post" id="{{post.id}}">
                     <div class="share_box_post_user">
-                        <img src="{% static "static/image/profile_photo_2.jpeg"%}" alt="User Photo" class="share_box_user_photo">
+                        <img src="{% static "static/image/chat_and_share.png"%}" alt="User Photo" class="share_box_user_photo">
                     </div>
                     <div class="share_box_post_text">
                         <h4 class="share_box_post_text_username"></h4>
                         <p class="share_box_post_text_messages">{{ post.post_text }}</p>
                     </div>
-                    <div class="share_box_post_photos_box">
-                        <img src="{% static "static/image/pizza.jpeg"%}" alt="Post Photo" class="share_box_post_photos">
-                    </div>
+                    {% if post.post_photo %}
+                        <div class="share_box_post_photos_box">
+                            <img src="{{post.post_photo.url }}" alt="Post Photo" class="share_box_post_photos">
+                        </div>
+                    {% endif %}
                     <div class="share_box_post_likes_comments">
                         <div class="share_box_post_likes">
-                            <button class="share_box_post_button">Like</button>
-                            <p class="share_box_post_likes_people">Tim</p>
+                            <input class="share_box_post_button" type="button" value="Like"
+                                   data-href="{% url 'Share:<user_name>/share/<post_id>/like' user_name post.id %}"/>
+                            {% for like in like_list %}
+                                {% if like.post_id == post.id %}
+                                    <p class="share_box_post_likes_people">{{like.liker}}</p>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                         <div class="share_box_post_comments">
-                            <button>Comment</button>
+                            <button onclick="document.getElementsByClassName('share_topbar_add_new_post_modal')[{{ forloop.counter0 }}].style.display='block'">Comment</button>
                             <div class="share_box_post_comments_box">
-                                <p>Tim: Looks Nice!</p>
+                                {% for comment in comment_list %}
+                                    {% if comment.post_id == post.id %}
+                                        <p>{{comment.commenter}}: {{ comment.comment_text }}</p>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
+
+                    <div class="share_topbar_add_new_post_modal" style="display:none;">
+                      <span onclick="document.getElementsByClassName('share_topbar_add_new_post_modal')[{{ forloop.counter0 }}].style.display='none'" class="close" title="Close Modal">×</span>
+                        <div class="comment_text">
+                            <label for="text">Text:</label><br>
+                            <textarea class="comment_input" id="text" name="text"></textarea><br>
+                            <input class="comment_submit" type="button" value="Submit"
+                            data-href="{% url 'Share:<user_name>/share/<post_id>/comment' user_name=user_name post_id=post.id %}"/>
+                        </div>
+                    </div>
                 </div>
+
             {% empty %}
                 <p class="error">Oops, there is not post!</p>
             {% endfor %}
@@ -44,4 +66,38 @@
     </div>
     {% block hidden %}
     {% endblock %}
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $('.share_box_post_button').click(function(){
+          $.ajax({
+                   type: "POST",
+                   url: $(this).attr("data-href"),
+                   data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                   dataType: "json",
+                   success: function(response) {
+                       const new_like = "<p class='share_box_post_likes_people'>" + response.liker + "</p>";
+                       const share_box_post_likes_comments_id = '#' + response.post_id + ' div.share_box_post_likes';
+                       $(share_box_post_likes_comments_id).append(new_like);
+                    }
+              });
+        })
+        $('.comment_submit').click(function () {
+            $.ajax({
+                   type: "POST",
+                   url: $(this).attr("data-href"),
+                   data: {'text': $(this).siblings("textarea").val(), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                   dataType: "json",
+                   success: function(response) {
+                       const new_comment = "<p class='share_box_post_likes_people'>" + response.commenter + ": "+ response.comment_text + "</p>";
+                       const share_box_post_comments_box = '#' + response.post_id + ' div.share_box_post_comments_box';
+                       console.log(response.post_id);
+                       $(share_box_post_comments_box).append(new_comment);
+                       $(".comment_input").val("");
+                       $(".share_topbar_add_new_post_modal").css("display","none");
+                    }
+              });
+        })
+    </script>
 {% endblock %}
