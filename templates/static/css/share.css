@@ -52,6 +52,11 @@
     color: #0d0d0d;
 }
 
+.share_box {
+    height: 630px;
+    overflow: auto;
+}
+
 .share_box_post{
     width: 100%;
     margin-top: 10px;
@@ -97,8 +102,8 @@
 
 .share_box_post_likes_comments{
     width: 250px;
-    position: absolute;
-    right: 80px;
+    position: relative;
+    left: 680px;
 }
 
 .share_box_post_likes{
@@ -225,5 +230,5 @@
 
 .error{
     margin: 5px;
-    color: rgba(196, 28, 66, 0.67);
+    color: rgba(89, 143, 95, 0.87);
 }

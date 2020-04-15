@@ -1,6 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from Account.views import get_user, has_signed_in, not_signed_in_error
 from Share.forms import PostForm
@@ -27,7 +28,7 @@ def share(request, user_name):
         }
         return render(request, "share.html", context=context)
 
-
+@csrf_exempt
 def post(request, user_name):
     user = get_user(user_name)
     if not user:
@@ -35,33 +36,34 @@ def post(request, user_name):
     check_has_signed_in = has_signed_in(request, user)
     if not check_has_signed_in:
         return not_signed_in_error(request)
-    post_list = Post.objects.filter(user=user).order_by("-post_date")
-    if request.method == "GET":
-        context = {
-            "title": "share",
-            "user_name": user_name,
-            "post_list": post_list,
-        }
-        return render(request, "share_post.html", context=context)
     if request.method == "POST":
+        print(request.POST)
         post_text = request.POST.get("post_text")
         post_photo = request.FILES
+        print(request.FILES)
         post_form = PostForm(request.POST, post_photo)
         if not post_text and not post_photo:
-            context = {
-                "title": "share",
-                "user_name": user_name,
-                "post_list": post_list,
-                "error": "Sorry, cannot share an empty post"
+            print("**")
+            data = {
+                "error": "Sorry, cannot share an empty post",
             }
-            return render(request, "share_post.html", context=context)
+            return JsonResponse(data)
+        if not post_photo:
+            new_post = Post.objects.create(user=user, post_text=post_text)
+            data = {
+                "post_id": new_post.id,
+                "post_text": new_post.post_text,
+                "post_photo_url": ""
+            }
+            return JsonResponse(data)
         if post_form.is_valid():
             Post.objects.create(user=user, post_text=post_text, post_photo=post_form.cleaned_data['post_photo'])
-        else:
-            Post.objects.create(user=user, post_text=post_text)
-        return redirect(reverse('Share:<user_name>/share', args=[user.user_name]))
+        # else:
+        #     Post.objects.create(user=user, post_text=post_text)
+        # return JsonResponse(reverse('Share:<user_name>/share', args=[user.user_name]))
 
 
+@csrf_exempt
 def like(request, user_name, post_id):
     user = get_user(user_name)
     if not user:
@@ -83,6 +85,7 @@ def like(request, user_name, post_id):
             return JsonResponse(data)
 
 
+@csrf_exempt
 def comment(request, user_name, post_id):
     user = get_user(user_name)
     if not user:
