@@ -37,30 +37,31 @@ def post(request, user_name):
     if not check_has_signed_in:
         return not_signed_in_error(request)
     if request.method == "POST":
-        print(request.POST)
         post_text = request.POST.get("post_text")
         post_photo = request.FILES
-        print(request.FILES)
-        post_form = PostForm(request.POST, post_photo)
         if not post_text and not post_photo:
-            print("**")
             data = {
                 "error": "Sorry, cannot share an empty post",
             }
             return JsonResponse(data)
-        if not post_photo:
+
+        post_form = PostForm(request.POST, post_photo)
+        if post_form.is_valid():
+            new_post = Post.objects.create(user=user, post_text=post_text, post_photo=post_form.cleaned_data['post_photo'])
+            data = {
+                "post_id": new_post.id,
+                "post_text": new_post.post_text,
+                "post_photo_url": new_post.post_photo.url,
+            }
+        else:
             new_post = Post.objects.create(user=user, post_text=post_text)
             data = {
                 "post_id": new_post.id,
                 "post_text": new_post.post_text,
-                "post_photo_url": ""
+                "post_photo_url": "",
             }
-            return JsonResponse(data)
-        if post_form.is_valid():
-            Post.objects.create(user=user, post_text=post_text, post_photo=post_form.cleaned_data['post_photo'])
-        # else:
-        #     Post.objects.create(user=user, post_text=post_text)
-        # return JsonResponse(reverse('Share:<user_name>/share', args=[user.user_name]))
+
+        return JsonResponse(data)
 
 
 @csrf_exempt
