@@ -1,5 +1,5 @@
 # Base Image
-FROM python:3.7-alpine
+FROM python:3.7
 
 # Set default enviroment variables
 ENV PYTHONUNBUFFERED 1
