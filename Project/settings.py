@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'Project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-#
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -99,7 +99,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'cse312',
         'USER': 'root',
-        'PASSWORD': '123456789',
+        'PASSWORD': os.getenv("MYSQL_PASSWORD"),
         'HOST': 'db',
         'PORT': '3306',
     }

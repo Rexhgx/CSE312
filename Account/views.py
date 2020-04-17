@@ -22,6 +22,11 @@ def not_signed_in_error(request):
     error = "Sorry! Looks like you have not signed in yet."
     return render(request, 'sign-in.html', {'error': error})
 
+
+def redirect_to_sign_in(request):
+    return redirect(reverse('Account:sign_in'))
+
+
 @csrf_protect
 def sign_in(request):
     if request.method == "GET":
