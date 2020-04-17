@@ -25,7 +25,7 @@ SECRET_KEY = '7g1n59#zmvi=*g4m%&t3&4-2*ab6g7^%$-1y*=k4@$rk6m!(fg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -58,7 +58,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [('redis', 6379)],
         },
     },
 }
@@ -96,12 +96,12 @@ WSGI_APPLICATION = 'Project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nuupdazx',
-        'USER': 'nuupdazx',
-        'PASSWORD': '64UzkOj0yFDFsTSS0uyM58jqOxYV0yQM',
-        'HOST': 'drona.db.elephantsql.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cse312',
+        'USER': 'root',
+        'PASSWORD': '123456789',
+        'HOST': 'db',
+        'PORT': '3306',
     }
 }
 
