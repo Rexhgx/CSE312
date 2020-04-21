@@ -8,6 +8,13 @@ from Share.forms import PostForm
 from Share.models import Post, Like, Comment
 
 
+def remove_danger_symbols(text):
+    text = text.replace("&", "//&amp")
+    text = text.replace("<", "//&lt")
+    text = text.replace(">", "//&gt")
+    return text
+
+
 def share(request, user_name):
     user = get_user(user_name)
     if not user:
@@ -38,6 +45,7 @@ def post(request, user_name):
         return not_signed_in_error(request)
     if request.method == "POST":
         post_text = request.POST.get("post_text")
+        post_text = remove_danger_symbols(post_text)
         post_photo = request.FILES
         if not post_text and not post_photo:
             data = {
@@ -95,6 +103,7 @@ def comment(request, user_name, post_id):
     if not check_has_signed_in:
         return not_signed_in_error(request)
     text = request.POST.get("text")
+    text = remove_danger_symbols(text)
     if text:
         Comment.objects.create(commenter=user_name, comment_text=text, post_id=post_id)
         data = {
