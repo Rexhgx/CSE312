@@ -1,6 +1,10 @@
+import uuid
+
 from django.db import models
 
 
 class User(models.Model):
-    u_name = models.CharField(max_length=16, unique=True, db_index=True)
-    u_password = models.CharField(max_length=16, db_index=True)
+    user_name = models.CharField(max_length=16, unique=True)
+    user_password = models.CharField(max_length=16)
+    user_token = models.UUIDField(default=uuid.uuid4)
+

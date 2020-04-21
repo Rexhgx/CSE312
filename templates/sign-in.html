@@ -11,7 +11,9 @@
     <div id="formContent">
         <!-- Tabs Titles -->
         <h2 class="active"> Sign In </h2>
-        <h2 class="inactive underlineHover">Sign Up </h2>
+        <a href="{% url "Account:sign_up" %}">
+            <h2 class="inactive underlineHover">Sign Up </h2>
+        </a>
 
         <!-- Login Form -->
         <form action="{% url "Account:sign_in" %}" method="post">
@@ -20,6 +22,9 @@
             <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
             <input type="submit" class="fadeIn fourth" value="Sign In">
         </form>
+        {% if error %}
+            <h4 class="error">{{ error }}</h4>
+        {% endif %}
 
         <!-- Remind Passowrd -->
         <div id="formFooter">

@@ -25,12 +25,15 @@ SECRET_KEY = '7g1n59#zmvi=*g4m%&t3&4-2*ab6g7^%$-1y*=k4@$rk6m!(fg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# DEBUG = False if os.getenv("DEBUG") == '0' else True
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Account',
-    'rest_framework'
+    'Share',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +55,16 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Project.urls'
+ASGI_APPLICATION = "Project.routing.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
+
 
 TEMPLATES = [
     {
@@ -76,10 +89,21 @@ WSGI_APPLICATION = 'Project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cse312',
+        'USER': 'root',
+        'PASSWORD': os.getenv("MYSQL_PASSWORD"),
+        'HOST': 'db',
+        'PORT': '3306',
     }
 }
 
@@ -122,6 +146,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/image/'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "templates"),
 ]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'templates/static/image')

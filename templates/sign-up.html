@@ -10,15 +10,23 @@
 <div class="wrapper fadeInDown">
     <div id="formContent">
         <!-- Tabs Titles -->
-        <h2 class="inactive underlineHover"> Sign In </h2>
+        <a href="{% url "Account:sign_in" %}">
+            <h2 class="inactive underlineHover"> Sign In </h2>
+        </a>
         <h2 class="active">Sign Up </h2>
 
         <!-- Login Form -->
-        <form>
+        <form action="{% url "Account:sign_up" %}" method="post">
+            {% csrf_token %}
             <input type="text" id="username" class="fadeIn second" name="username"  placeholder="username">
             <input type="password" id="password" class="fadeIn third" name="password"  placeholder="password">
             <input type="submit" class="fadeIn fourth" value="Sign up">
         </form>
+
+        <!-- Error Message -->
+        {% if error %}
+            <h4 class="error">{{ error }}</h4>
+        {% endif %}
 
     </div>
 </div>

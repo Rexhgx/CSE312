@@ -17,7 +17,7 @@
     margin-left: 10px;
 }
 
-.friends_topbar_add_new_friend{
+.friends_topbar_add_new_friend, .friends_topbar_add_new_friend_modal_container_submit{
     opacity: 0.7;
     width: 200px;
     background-color: rgba(150, 196, 172, 0.67);
@@ -29,24 +29,24 @@
     cursor: pointer;
 }
 
-.friends_topbar_add_new_friend span{
+.friends_topbar_add_new_friend, .friends_topbar_add_new_friend_modal_container_submit span{
     direction: ltr;
     font-size: 12px;
     color: #484848;
 }
 
-.friends_topbar_add_new_friend:active{
+.friends_topbar_add_new_friend:active, .friends_topbar_add_new_friend_modal_container_submit:active{
     font-size: 15px;
     color: #0d0d0d;
     box-shadow: 0 1px #666;
     transform: translateY(2px);
 }
 
-.friends_topbar_add_new_friend:active:after{
+.friends_topbar_add_new_friend:active:after, .friends_topbar_add_new_friend_modal_container_submit:after{
     border: none;
 }
 
-.friends_topbar_add_new_friend:hover span{
+.friends_topbar_add_new_friend:hover, .friends_topbar_add_new_friend_modal_container_submit:hover span{
     font-size: 15px;
     color: #0d0d0d;
 }
@@ -160,10 +160,6 @@
     color: #5c5c5c;
 }
 
-h6, div{
-    font-family: Arial, serif;
-}
-
 .chat_box_content {
     width: 100%;
     height: 500px;
@@ -172,6 +168,7 @@ h6, div{
 }
 
 .chat_box_bubble{
+    width: 100%;
     margin: 20px 30px;
 }
 
@@ -187,10 +184,10 @@ h6, div{
 .chat_bubble_right{
     padding: 10px 14px;
     border-radius: 50px 15px 5px 30px;
-    position: absolute;
+    position: relative;
+    left: 560px;
     animation: fadeIn ease-in;
     display: inline-block;
-    right: 50px;
     background-color: rgba(150, 196, 172, 0.67);
 }
 
@@ -200,4 +197,63 @@ h6, div{
     width: 600px;
     margin: 40px;
     font-size: 20px;
+}
+
+
+.friends_topbar_add_new_friend_modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.54);
+  padding-top: 50px;
+}
+
+.friends_topbar_add_new_friend_modal_content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto;
+    border: 1px solid #888;
+    border-radius: 20px;
+    width: 30%;
+    height: 200px;
+}
+
+.friends_topbar_add_new_friend_modal_container{
+    margin-top: 45px;
+    padding: 16px;
+    text-align: center;
+}
+
+.friends_topbar_add_new_friend_modal_container_input{
+    width: 140px;
+    line-height: 30px;
+    font-size: 15px;
+    outline: 0;
+    border-radius: 15px;
+    padding-left: 10px;
+}
+
+.friends_topbar_add_new_friend_modal_container_submit{
+    width: 80px;
+    height: 20px;
+    margin: 10px;
+}
+
+.close {
+  position: absolute;
+  right: 35px;
+  top: 15px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #f1f1f1;
+}
+
+.close:hover,
+.close:focus {
+  color: #f44336;
+  cursor: pointer;
 }

@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+    <link href="{% static "static/css/share.css"%}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+    <div class="share_container">
+        <div class="share_topbar">
+            <h1 class="share_topbar_share">Share</h1>
+            <button onclick="document.getElementById('modal').style.display='block'" class="share_topbar_add_new_post"><span>+ New Post</span></button>
+        </div>
+
+        <div class="share_box">
+            {% for post in post_list %}
+                <div class="share_box_post" id="{{post.id}}">
+                    <div class="share_box_post_user">
+                        <img src="{% static "static/image/chat_and_share.png"%}" alt="User Photo" class="share_box_user_photo">
+                    </div>
+                    <div class="share_box_post_text">
+                        <h4 class="share_box_post_text_username"></h4>
+                        <p class="share_box_post_text_messages">{{ post.post_text }}</p>
+                    </div>
+                    {% if post.post_photo %}
+                        <div class="share_box_post_photos_box">
+                            <img src="{{post.post_photo.url }}" alt="Post Photo" class="share_box_post_photos">
+                        </div>
+                    {% endif %}
+                    <div class="share_box_post_likes_comments">
+                        <div class="share_box_post_likes">
+                            <input class="share_box_post_button" type="button" value="Like"/>
+                            {% for like in like_list %}
+                                {% if like.post_id == post.id %}
+                                    <p class="share_box_post_likes_people">{{like.liker}}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="share_box_post_comments">
+                            <button class="share_box_post_comments_button">Comment</button>
+                            <div class="share_box_post_comments_box">
+                                {% for comment in comment_list %}
+                                    {% if comment.post_id == post.id %}
+                                        <p>{{comment.commenter}}: {{ comment.comment_text }}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="share_topbar_add_new_post_modal" style="display:none;">
+                          <span class="close" title="Close Modal">×</span>
+                            <div class="comment_text">
+                                <label for="text">Text:</label><br>
+                                <textarea class="comment_input" id="text" name="text"></textarea><br>
+                                <input class="comment_submit" type="button" value="Submit"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div id="modal" class="share_topbar_add_new_post_modal" style="display: none">
+          <span onclick="document.getElementById('modal').style.display='none'" class="close" title="Close Modal">×</span>
+          <form class="share_topbar_add_new_post_modal_content" enctype="multipart/form-data" method="post"
+          data-href="{% url 'Share:<user_name>/share/post' user_name=user_name %}">
+              {% csrf_token %}
+            <div class="share_topbar_add_new_post_modal_container">
+                <label for="post_text">Text:</label><br>
+                <textarea class="share_topbar_add_new_post_modal_container_input" id="post_text" name="post_text"></textarea><br>
+                <input class="share_topbar_add_new_post_modal_container_file" type="file" id="post_photo" name="post_photo" accept="image/*">
+                <input class="share_topbar_add_new_post_modal_container_submit" type="submit" value="Post">
+                <h4 class="error" id="post_error"></h4>
+            </div>
+          </form>
+         </div>
+    </div>
+    {% block hidden %}
+    {% endblock %}
+{% endblock %}
+
+{% block javascript %}
+    {{ user_name|json_script:"user_name" }}
+    <script>
+
+    const userName = JSON.parse(document.getElementById("user_name").textContent);
+
+    const shareSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/'
+        + userName
+        + '/share/'
+    );
+
+    shareSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        if (data.operation === "post"){
+            const new_post = get_new_post(data.post_id, data.post_text, data.post_photo_url);
+            $('.share_box').prepend(new_post);
+        }
+        if (data.operation === "comment"){
+            const new_comment = "<p class='share_box_post_likes_people'>" + data.commenter + ": "+ data.comment_text + "</p>";
+            const share_box_post_comments_box = '#' + data.post_id + ' div.share_box_post_comments_box';
+            $(share_box_post_comments_box).append(new_comment);
+        }else if (data.operation === "like"){
+            const new_like = "<p class='share_box_post_likes_people'>" + data.liker + "</p>";
+            const share_box_post_likes_comments_id = '#' + data.post_id + ' div.share_box_post_likes';
+            $(share_box_post_likes_comments_id).append(new_like);
+        }
+    };
+
+    shareSocket.onclose = function (e) {
+        console.error('Share socket closed unexpectedly');
+    };
+
+
+
+
+    $('.share_topbar_add_new_post_modal_content').submit(function(e){
+        e.preventDefault();
+        $.ajax({
+               type: "POST",
+               url: $(this).attr("data-href"),
+               data: new FormData(this),
+               cache: false,
+               processData: false,
+               contentType: false,
+               success: function(response) {
+                   const error = response['error'];
+                   if (error){
+                       $('#post_error').html(error);
+                       $('#modal').css("display","block");
+                   }else{
+                        shareSocket.send(JSON.stringify({
+                           'operation': 'post',
+                           'post_id': response.post_id,
+                           'post_text': response.post_text,
+                           'post_photo_url': response.post_photo_url,
+                        }));
+                        $("#post_text").val("");
+                        $("#modal").css("display","none");
+                   }
+                }
+        });
+
+        return false
+    });
+
+    $('.close').click(function () {
+        $(this).parent().css("display", "none");
+    });
+
+
+
+    $('body')
+        .delegate('.share_box_post_comments_button', 'click', function () {
+            $(this).parent().next().css("display", "block");
+        })
+        .delegate('.share_box_post_button', 'click', function () {
+        const post_id = $(this).parent().parent().parent().attr("id");
+        const post_url = '/' + userName + '/share/' + post_id + '/like';
+        $.ajax({
+               type: "POST",
+               url: post_url,
+               dataType: "json",
+               success: function(response) {
+                   shareSocket.send(JSON.stringify({
+                       'operation': 'like',
+                       'post_id': response.post_id,
+                       'liker': response.liker,
+                    }));
+                }
+          })
+        })
+        .delegate('.comment_submit', 'click', function () {
+            const post_id = $(this).parent().parent().parent().parent().attr("id");
+            console.log(post_id)
+            const post_url = '/' + userName + '/share/' + post_id + '/comment';
+            const comment_text = $(this).siblings("textarea").val();
+            $.ajax({
+            type: "POST",
+            url: post_url,
+            data: {'text': comment_text},
+            dataType: "json",
+            success: function (response) {
+                    shareSocket.send(JSON.stringify({
+                        'operation': 'comment',
+                        'post_id': response.post_id,
+                        'commenter': response.commenter,
+                        'comment_text': response.comment_text,
+                    }));
+
+                    $(".comment_input").val("");
+                    $(".share_topbar_add_new_post_modal").css("display", "none");
+                }
+            })
+        });
+
+    function get_new_post(post_id, post_text, post_photo_url) {
+        let new_post =  `
+         <div class="share_box_post" id=${post_id.toString()}>
+            <div class="share_box_post_user">
+                    <img src="{% static "static/image/chat_and_share.png"%}" alt="User Photo" class="share_box_user_photo">
+            </div>
+            <div class="share_box_post_text">
+                <h4 class="share_box_post_text_username"></h4>
+                <p class="share_box_post_text_messages">${post_text}</p>
+            </div>`;
+        if (post_photo_url){
+            new_post += `
+            <div class="share_box_post_photos_box">
+                <img src="${post_photo_url}" alt="Post Photo" class="share_box_post_photos">
+            </div>`
+        }
+        new_post += `
+            <div class="share_box_post_likes_comments">
+                <div class="share_box_post_likes">
+                    <input class="share_box_post_button" type="button" value="Like"/>
+                </div>
+                <div class="share_box_post_comments">
+                    <button class="share_box_post_comments_button">Comment</button>
+                    <div class="share_box_post_comments_box">
+                    </div>
+                </div>
+
+                <div class="share_topbar_add_new_post_modal" style="display:none;">
+                    <span onclick="document.getElementsByClassName('share_topbar_add_new_post_modal')[1].style.display='none'" class="close" title="Close Modal">×</span>
+                    <div class="comment_text">
+                        <label for="text">Text:</label><br>
+                        <textarea class="comment_input" id="text" name="text"></textarea><br>
+                        <input class="comment_submit" type="button" value="Submit" "/>
+                    </div>
+                </div>
+            </div>
+         </div>`;
+        return new_post
+    }
+    </script>
+{% endblock %}
