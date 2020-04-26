@@ -1,3 +1,13 @@
+# "Important!"
+Docker-Compose procedure:
+1.Clone your repository
+2.cd into to the directory of the repository
+3.Build the docker image (docker-compose build)
+4.Create and run a docker containers (docker-compose up --detach)
+5.Open a browser and navigate to http://localhost:<local_port> (We’ll read your docker-compose.yml to find your local port)
+
+Please run "docker-compose run web python manage.py migrate" after step 4 and before step 5.
+
 # CSE312 "CHATME!"
 
 ChatMe is a project that we built for CSE312. We developed website by utilizing various framworks and protocals that allows our client to "chat","Follow","Share" with other users.
