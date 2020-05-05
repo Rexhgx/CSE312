@@ -182,10 +182,11 @@
 }
 
 .chat_bubble_right{
+    width: 200px;
     padding: 10px 14px;
     border-radius: 50px 15px 5px 30px;
     position: relative;
-    left: 560px;
+    left: 520px;
     animation: fadeIn ease-in;
     display: inline-block;
     background-color: rgba(150, 196, 172, 0.67);
@@ -261,4 +262,37 @@
 .error{
     margin: 0 0 0 80px;
     color: rgba(89, 143, 95, 0.87);
+}
+
+.chat_box_message_button{
+    opacity: 0.7;
+    width: 50px;
+    background-color: rgba(150, 196, 172, 0.67);
+    border: none;
+    outline: none;
+    box-shadow: 0 4px #999;
+    border-radius: 5px 5px 5px 5px;
+    cursor: pointer;
+}
+
+.chat_box_message_button {
+    direction: ltr;
+    font-size: 12px;
+    color: #484848;
+}
+
+.chat_box_message_button:active{
+    font-size: 15px;
+    color: #0d0d0d;
+    box-shadow: 0 1px #666;
+    transform: translateY(2px);
+}
+
+.chat_box_message_button:active:after{
+    border: none;
+}
+
+.chat_box_message_button:hover{
+    font-size: 15px;
+    color: #0d0d0d;
 }

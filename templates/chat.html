@@ -33,26 +33,10 @@
             </div>
         </div>
         <div class="chat_box_content">
-            <div class="chat_box_bubble">
-                <div class="chat_bubble_left">
-                    How are you?
-                </div>
-            </div>
-            <div class="chat_box_bubble">
-                <div class="chat_bubble_right">
-                    Good. How are you?
-                </div>
-            </div>
-            <div class="chat_box_bubble">
-                <div class="chat_bubble_left">
-                    Good.
-                </div>
-            </div>
         </div>
         <div class="chat_box_message">
-            <form class='chat_box_message_form' >
-                <input class="chat_box_message_input" type="text" id="chat_box_message_input" placeholder="Let's chat.."/>
-            </form>
+            <input class="chat_box_message_input" type="text" id="chat_box_message_input" placeholder="Let's chat.."/>
+            <input class="chat_box_message_button" type="button" id="chat_box_message_button" value="send">
         </div>
     </div>
 
@@ -71,12 +55,15 @@
 {% endblock %}
 
 {% block javascript %}
+    {{ user_name|json_script:"user_name" }}
     <script>
+        const user_name = JSON.parse(document.getElementById("user_name").textContent);
+
         $('.friends_topbar_add_new_friend_modal_container_submit').click(function (e) {
             $.ajax({
                 type: "POST",
-                url: '/' + {{ user_name }} + '/friend',
-                data: {'username': $('#username').val()},
+                url: '/' + user_name + '/friend',
+                data: {'username': $('#username').val().toString()},
                 success: function (response) {
                     const error = response['error'];
                     if (error){
@@ -87,7 +74,7 @@
                         <div class="friends_drawer">
                             <img src="{% static "static/image/chat_and_share.png"%}" alt="Friend Photo" class="friend_photo">
                             <div class="text">
-                                <h6>${friend_name}</h6>
+                                <h6 class="friends_drawer_friend_name">${friend_name}</h6>
                             </div>
                         </div>`
                         $('.friends_information').prepend(new_friend);
@@ -98,12 +85,81 @@
             })
         })
 
-        $('.friends_drawer').click(function () {
-            const friend_photo = $(this).find('.friend_photo')[0].src;
-            const friend_name = $(this).find('.friends_drawer_friend_name')[0].innerText;
-            console.log(friend_photo)
-            $('.friend_photo').attr("src", friend_photo)
-            $('.chat_box_topbar_friend_name').text(friend_name)
-        })
+        $('body')
+            .delegate('.friends_drawer', 'click', function () {
+                const friend_photo = $(this).find('.friend_photo')[0].src;
+                const friend_name = $(this).find('.friends_drawer_friend_name')[0].innerText;
+                $('.friend_photo').attr("src", friend_photo)
+                $('.chat_box_topbar_friend_name').text(friend_name)
+                $('.chat_box_content').empty()
+                $('.chat_box_message_input').val("")
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/' + user_name + '/' + friend_name +'/messages',
+                    success: function (response) {
+                        let message = null
+                        for(let i = 0; i < response.length; i++){
+                            if (response[i]["sender_name"] === user_name){
+                                message = `
+                                    <div class="chat_box_bubble">
+                                        <div class="chat_bubble_right">
+                                            ${response[i]["content"]}
+                                        </div>
+                                    </div>
+                                `
+                            }else {
+                                message = `
+                                    <div class="chat_box_bubble">
+                                        <div class="chat_bubble_left">
+                                            ${response[i]["content"]}
+                                        </div>
+                                    </div>
+                                `
+                            }
+                            $('.chat_box_content').append(message);
+                        }
+                    }
+                })
+            })
+            .delegate('.chat_box_message_button', 'click', function () {
+                const friend_name = $('.chat_box_topbar_friend_name')[0].innerText;
+                const content = $('#chat_box_message_input').val()
+                if (!friend_name){
+                    const error = `
+                                <div class="chat_box_bubble">
+                                    <div class="chat_bubble_left">
+                                        Please choose a friend first.
+                                    </div>
+                                </div>
+                            `
+                    $('.chat_box_content').append(error);
+                    $('#chat_box_message_input').val("");
+                }else if (content){
+                    $.ajax({
+                        type: 'POST',
+                        url: '/' + user_name + '/' + friend_name +'/messages',
+                        data: {'content': content},
+                        success: function (response) {
+                            const content = response['content'];
+                            const new_message = `
+                                <div class="chat_box_bubble">
+                                    <div class="chat_bubble_right">
+                                        ${content}
+                                    </div>
+                                </div>
+                            `
+                            $('.chat_box_content').append(new_message);
+                            $('#chat_box_message_input').val("");
+                        }
+                    })
+                }
+            })
+            .delegate('.chat_box_message_input', 'keypress', function (e) {
+                var word = (e.keyCode ? e.keyCode : e.which);
+                if(word == '13'){
+                    $(this).siblings(".chat_box_message_button").click()
+                }
+            })
     </script>
 {% endblock %}
