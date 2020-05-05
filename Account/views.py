@@ -41,7 +41,7 @@ def sign_in(request):
             return render(request, 'sign-in.html', {'error': error})
         else:
             # If yes, route to "chat" page
-            response = redirect(reverse('Account:<user_name>/chat', args=[user.user_name]))
+            response = redirect(reverse('Chat:<user_name>/chat', args=[user.user_name]))
             response.set_cookie("token", user.user_token)
             return response
 
@@ -66,20 +66,6 @@ def sign_up(request):
         # Username has not been registered
         user = User.objects.create(user_name=user_name, user_password=user_password)
         return redirect(reverse('Account:sign_in'))
-
-
-def chat(request, user_name):
-    user = get_user(user_name)
-    if not user:
-        return not_signed_in_error(request)
-    check_has_signed_in = has_signed_in(request, user)
-    if not check_has_signed_in:
-        return not_signed_in_error(request)
-    context = {
-        "title": "chat",
-        "user_name": user_name,
-    }
-    return render(request, "chat.html", context=context)
 
 
 def profile(request, user_name):

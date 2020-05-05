@@ -8,41 +8,28 @@
     <div class="friends">
         <div class="friends_topbar">
             <h1 class="friends_topbar_chat">Chats</h1>
-            <button onclick="document.getElementById('modal').style.display='block'" class="friends_topbar_add_new_friend"><span>+ Add New Friend</span></button>
+            <button onclick="document.getElementById('modal').style.display='block'" class="friends_topbar_add_new_friend">
+                <span>+ Add New Friend</span>
+            </button>
         </div>
-        <div class="friends_searchbar">
-            <form action="">
-                <input type="text" placeholder="Search.." name="search">
-                <button type="submit">Search</button>
-            </form>
-        </div>
+
         <div class="friends_information">
-            <div class="friends_drawer">
-                <img src="{% static "static/image/profile_photo_1.jpeg"%}" alt="Friend Photo" class="friend_photo">
-                <div class="text">
-                    <h6>Tim</h6>
+            {% for friend in friends %}
+                <div class="friends_drawer">
+                    <img src="{% static "static/image/chat_and_share.png"%}" alt="Friend Photo" class="friend_photo">
+                    <div class="text">
+                        <h6 class="friends_drawer_friend_name">{{ friend.friend_name }}</h6>
+                    </div>
                 </div>
-            </div>
-            <div class="friends_drawer">
-                <img src="{% static "static/image/profile_photo_2.jpeg"%}" alt="Friend Photo" class="friend_photo">
-                <div class="text">
-                    <h6>Jackson</h6>
-                </div>
-            </div>
-            <div class="friends_drawer">
-                <img src="{% static "static/image/profile_photo_3.jpeg"%}" alt="Friend Photo" class="friend_photo">
-                <div class="text">
-                    <h6>Willam</h6>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
     <div class="chat_box">
         <div class="chat_box_topbar">
-            <img src="{% static "static/image/profile_photo_1.jpeg"%}" alt="Friend Photo" class="friend_photo">
+            <img src="" alt="" class="friend_photo">
             <div class="chat_box_topbar_text">
-                <h6>Cat</h6>
+                <h6 class="chat_box_topbar_friend_name"></h6>
             </div>
         </div>
         <div class="chat_box_content">
@@ -68,17 +55,55 @@
             </form>
         </div>
     </div>
-{% endblock %}
 
-{% block hidden %}
-    <div id="modal" class="friends_topbar_add_new_friend_modal">
+    <div id="modal" class="friends_topbar_add_new_friend_modal" style="display: none">
       <span onclick="document.getElementById('modal').style.display='none'" class="close" title="Close Modal">×</span>
-      <form class="friends_topbar_add_new_friend_modal_content" action="">
+      <form class="friends_topbar_add_new_friend_modal_content">
+        {% csrf_token %}
         <div class="friends_topbar_add_new_friend_modal_container">
             <label for="username">Username:</label><br>
             <input class="friends_topbar_add_new_friend_modal_container_input" type="text" id="username" name="username"><br>
-            <input class="friends_topbar_add_new_friend_modal_container_submit" type="submit" value="Submit">
+            <input class="friends_topbar_add_new_friend_modal_container_submit" type="button" value="Submit">
         </div>
+        <h4 class="error" id="error"></h4>
       </form>
     </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $('.friends_topbar_add_new_friend_modal_container_submit').click(function (e) {
+            $.ajax({
+                type: "POST",
+                url: '/' + {{ user_name }} + '/friend',
+                data: {'username': $('#username').val()},
+                success: function (response) {
+                    const error = response['error'];
+                    if (error){
+                       $('#error').html(error);
+                    } else {
+                        const friend_name = response['friend_name'];
+                        const new_friend = `
+                        <div class="friends_drawer">
+                            <img src="{% static "static/image/chat_and_share.png"%}" alt="Friend Photo" class="friend_photo">
+                            <div class="text">
+                                <h6>${friend_name}</h6>
+                            </div>
+                        </div>`
+                        $('.friends_information').prepend(new_friend);
+                        $('.friends_topbar_add_new_friend_modal_container_input').val("");
+                        $('.friends_topbar_add_new_friend_modal').css("display", "none");
+                    }
+                }
+            })
+        })
+
+        $('.friends_drawer').click(function () {
+            const friend_photo = $(this).find('.friend_photo')[0].src;
+            const friend_name = $(this).find('.friends_drawer_friend_name')[0].innerText;
+            console.log(friend_photo)
+            $('.friend_photo').attr("src", friend_photo)
+            $('.chat_box_topbar_friend_name').text(friend_name)
+        })
+    </script>
 {% endblock %}

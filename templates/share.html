@@ -173,7 +173,6 @@
         })
         .delegate('.comment_submit', 'click', function () {
             const post_id = $(this).parent().parent().parent().parent().attr("id");
-            console.log(post_id)
             const post_url = '/' + userName + '/share/' + post_id + '/comment';
             const comment_text = $(this).siblings("textarea").val();
             $.ajax({

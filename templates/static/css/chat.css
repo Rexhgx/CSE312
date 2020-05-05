@@ -257,3 +257,8 @@
   color: #f44336;
   cursor: pointer;
 }
+
+.error{
+    margin: 0 0 0 80px;
+    color: rgba(89, 143, 95, 0.87);
+}

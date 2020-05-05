@@ -18,7 +18,7 @@
                     <h4 class="username">{{ user_name }}</h4>
                 </div>
                 <div class="link">
-                    <a href="{% url "Account:<user_name>/chat" user_name %}" class="chat_link">
+                    <a href="{% url "Chat:<user_name>/chat" user_name %}" class="chat_link">
                         <div class="chat_content">
                             <img class="chat_icon" src="{% static "static/image/chat_icon.svg"%}" alt="Chat Icon">
                             <span class="chat">chat</span>
