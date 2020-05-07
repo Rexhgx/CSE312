@@ -36,6 +36,12 @@
                             <span class="profile">profile</span>
                         </div>
                     </a>
+                    <a href="{% url "Account:<user_name>/sign_out" user_name %}" class="sign_out_link">
+                        <div class="sign_out_content">
+                            <img class="sign_out_icon" src="{% static "static/image/sign_out_icon.svg"%}" alt="Sign out Icon">
+                            <span class="sign_out">sign out</span>
+                        </div>
+                    </a>
                 </div>
             </div>
 

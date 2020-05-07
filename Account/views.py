@@ -92,3 +92,14 @@ def sign_up(request):
 
         User.objects.create(user_name=user_name, user_password=user_password)
         return redirect(reverse('Account:sign_in'))
+
+
+def sign_out(request, user_name):
+    user = get_user(user_name, request)
+    if not user:
+        return not_signed_in_error(request)
+
+    response = redirect(reverse('Account:sign_in'))
+    # delete token
+    response.delete_cookie("token")
+    return response

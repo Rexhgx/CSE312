@@ -54,35 +54,36 @@ div{
     font-size: 20px;
 }
 
+.chat_link, .share_link, .profile_link, .sign_out_link{
+    display: block;
+    text-decoration: none;
+}
+
+.chat_link:hover, .share_link:hover, .profile_link:hover, .sign_out_link:hover{
+    padding:5px;
+    color: black;
+}
+
+.chat_link:hover span, .share_link:hover span, .profile_link:hover, .sign_out_link:hover span{
+    color: black;
+}
+
+.chat_link:hover img, .share_link:hover img, .profile_link:hover, .sign_out_link:hover img{
+    opacity: 1.0;
+}
+
+.chat_content, .share_content, .profile_content, .sign_out_content{
+    width: 120px;
+    margin-top: 30px;
+    margin-left: 45px;
+    display: flex;
+}
+
 .link {
     width: 200px;
     height: 450px;
 }
 
-.chat_link, .share_link, .profile_link{
-    display: block;
-    text-decoration: none;
-}
-
-.chat_link:hover, .share_link:hover, .profile_link:hover{
-    padding:5px;
-    color: black;
-}
-
-.chat_link:hover span, .share_link:hover span, .profile_link:hover span{
-    color: black;
-}
-
-.chat_link:hover img, .share_link:hover img, .profile_link:hover img{
-    opacity: 1.0;
-}
-
-.chat_content, .share_content, .profile_content{
-    width: 80px;
-    margin-top: 30px;
-    margin-left: 45px;
-    display: flex;
-}
 
 .link img{
     opacity: 0.6;
