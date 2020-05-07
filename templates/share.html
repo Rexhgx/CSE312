@@ -78,16 +78,15 @@
 {% endblock %}
 
 {% block javascript %}
-    {{ user_name|json_script:"user_name" }}
     <script>
 
-    const userName = JSON.parse(document.getElementById("user_name").textContent);
+    const user_name = JSON.parse(document.getElementById("user_name").textContent);
 
     const shareSocket = new WebSocket(
         'ws://'
         + window.location.host
         + '/ws/'
-        + userName
+        + user_name
         + '/share/'
     );
 
@@ -111,9 +110,6 @@
     shareSocket.onclose = function (e) {
         console.error('Share socket closed unexpectedly');
     };
-
-
-
 
     $('.share_topbar_add_new_post_modal_content').submit(function(e){
         e.preventDefault();
@@ -157,7 +153,7 @@
         })
         .delegate('.share_box_post_button', 'click', function () {
         const post_id = $(this).parent().parent().parent().attr("id");
-        const post_url = '/' + userName + '/share/' + post_id + '/like';
+        const post_url = '/' + user_name + '/share/' + post_id + '/like';
         $.ajax({
                type: "POST",
                url: post_url,
@@ -173,7 +169,7 @@
         })
         .delegate('.comment_submit', 'click', function () {
             const post_id = $(this).parent().parent().parent().parent().attr("id");
-            const post_url = '/' + userName + '/share/' + post_id + '/comment';
+            const post_url = '/' + user_name + '/share/' + post_id + '/comment';
             const comment_text = $(this).siblings("textarea").val();
             $.ajax({
             type: "POST",

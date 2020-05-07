@@ -43,6 +43,7 @@
             {% endblock %}
         </div>
     {% endif %}
+    {{ user_name|json_script:"user_name" }}
 
     <script>
         const modal = document.getElementsByClassName('share_topbar_add_new_post_modal');

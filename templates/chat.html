@@ -32,7 +32,7 @@
                 <h6 class="chat_box_topbar_friend_name"></h6>
             </div>
         </div>
-        <div class="chat_box_content">
+        <div class="chat_box_content" id="chat_box_content">
         </div>
         <div class="chat_box_message">
             <input class="chat_box_message_input" type="text" id="chat_box_message_input" placeholder="Let's chat.."/>
@@ -55,9 +55,15 @@
 {% endblock %}
 
 {% block javascript %}
-    {{ user_name|json_script:"user_name" }}
     <script>
         const user_name = JSON.parse(document.getElementById("user_name").textContent);
+
+        let chatSocket = {}
+        let chat_content = $('#chat_box_content')[0];
+
+        chatSocket.onclose = function(e) {
+            console.error('Share socket closed unexpectedly');
+        };
 
         $('.friends_topbar_add_new_friend_modal_container_submit').click(function (e) {
             $.ajax({
@@ -98,13 +104,16 @@
                     type: 'GET',
                     url: '/' + user_name + '/' + friend_name +'/messages',
                     success: function (response) {
+                        const messages = response["messages"]
+                        const room = response["room"]
+
                         let message = null
-                        for(let i = 0; i < response.length; i++){
-                            if (response[i]["sender_name"] === user_name){
+                        for(let i = 0; i < messages.length; i++){
+                            if (messages[i]["sender_name"] === user_name){
                                 message = `
                                     <div class="chat_box_bubble">
                                         <div class="chat_bubble_right">
-                                            ${response[i]["content"]}
+                                            ${messages[i]["content"]}
                                         </div>
                                     </div>
                                 `
@@ -112,13 +121,23 @@
                                 message = `
                                     <div class="chat_box_bubble">
                                         <div class="chat_bubble_left">
-                                            ${response[i]["content"]}
+                                            ${messages[i]["content"]}
                                         </div>
                                     </div>
                                 `
                             }
                             $('.chat_box_content').append(message);
                         }
+
+                        chat_content.scrollTop = chat_content.scrollHeight;
+
+                        chatSocket = new WebSocket(
+                            'ws://'
+                            + window.location.host
+                            + '/ws/chat/'
+                            + room
+                            + '/'
+                        )
                     }
                 })
             })
@@ -141,18 +160,42 @@
                         url: '/' + user_name + '/' + friend_name +'/messages',
                         data: {'content': content},
                         success: function (response) {
-                            const content = response['content'];
-                            const new_message = `
-                                <div class="chat_box_bubble">
-                                    <div class="chat_bubble_right">
-                                        ${content}
-                                    </div>
-                                </div>
-                            `
-                            $('.chat_box_content').append(new_message);
+                            console.log(response)
+                            chatSocket.send(JSON.stringify({
+                                'operation': 'chat',
+                                'sender_name': response['sender_name'],
+                                'receiver_name': response['receiver_name'],
+                                'content': response['content'],
+                            }))
                             $('#chat_box_message_input').val("");
                         }
                     })
+
+                    chatSocket.onmessage = function(e) {
+                        const data = JSON.parse(e.data);
+                        if (data.operation === 'chat'){
+                            let new_message = ''
+                            if(data.sender_name === user_name){
+                                new_message = `
+                                    <div class="chat_box_bubble">
+                                        <div class="chat_bubble_right">
+                                            ${data.content}
+                                        </div>
+                                    </div>
+                                `
+                            }else{
+                                new_message = `
+                                    <div class="chat_box_bubble">
+                                        <div class="chat_bubble_left">
+                                            ${data.content}
+                                        </div>
+                                    </div>
+                                `
+                            }
+                            $('.chat_box_content').append(new_message);
+                            chat_content.scrollTop = chat_content.scrollHeight;
+                        }
+                    };
                 }
             })
             .delegate('.chat_box_message_input', 'keypress', function (e) {

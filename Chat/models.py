@@ -13,3 +13,8 @@ class Message(models.Model):
     sender_name = models.CharField(max_length=16)
     receiver_name = models.CharField(max_length=16)
     content = models.CharField(max_length=150, blank=True, null=True)
+
+
+class Room(models.Model):
+    user_one = models.CharField(max_length=16)
+    user_two = models.CharField(max_length=16)

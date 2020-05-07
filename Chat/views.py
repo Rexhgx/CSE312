@@ -9,7 +9,7 @@ from Account.views import get_user, has_signed_in, not_signed_in_error
 
 from Share.views import remove_danger_symbols
 
-from Chat.models import Friend, Message
+from Chat.models import Friend, Message, Room
 
 
 def chat(request, user_name):
@@ -57,8 +57,13 @@ def friend(request, user_name):
             data = {"error": error}
             return JsonResponse(data)
         else:
+            # Add friends
             Friend.objects.create(friend_name=friend_name, user=user)
             Friend.objects.create(friend_name=user_name, user=friend)
+
+            # Create a room for the user and each friend
+            Room.objects.create(user_one=user_name, user_two=friend_name)
+
             data = {"friend_name": friend_name}
             return JsonResponse(data)
 
@@ -75,17 +80,27 @@ def messages(request, user_name, friend_name):
     friend = get_object_or_404(Friend, friend_name=friend_name, user=user)
 
     if request.method == 'GET':
+        response = {"messages": [], "room": None}
+
+        # Get messages between the user and a friend
         messages = Message.objects.filter(
                 Q(sender_name=user_name, receiver_name=friend_name) |
                 Q(sender_name=friend_name, receiver_name=user_name)
         ).order_by("id")
-        response = []
         for message in messages:
-            response.append({
+            response["messages"].append({
                 "sender_name": message.sender_name,
                 "receiver_name": message.receiver_name,
                 "content": message.content
             })
+
+        # Get the room between the user and a friend
+        room = Room.objects.get(
+            Q(user_one=user_name, user_two=friend_name) |
+            Q(user_one=friend_name, user_two=user_name)
+        )
+        response["room"] = room.id
+
         return JsonResponse(response, safe=False)
     elif request.method == 'POST':
         content = remove_danger_symbols(request.POST.get("content"))
@@ -94,6 +109,10 @@ def messages(request, user_name, friend_name):
             sender_name=user_name,
             receiver_name=friend_name,
             content=content)
-        data = {"content": message.content}
+        data = {
+            "sender_name": message.sender_name,
+            "receiver_name": message.receiver_name,
+            "content": message.content
+        }
         return JsonResponse(data)
 
