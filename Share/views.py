@@ -2,7 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-from Account.views import get_user, has_signed_in, not_signed_in_error
+from Account.views import get_user, not_signed_in_error
 from Share.forms import PostForm
 from Share.models import Post, Like, Comment
 
@@ -15,12 +15,10 @@ def remove_danger_symbols(text):
 
 
 def share(request, user_name):
-    user = get_user(user_name)
+    user = get_user(user_name, request)
     if not user:
         return not_signed_in_error(request)
-    check_has_signed_in = has_signed_in(request, user)
-    if not check_has_signed_in:
-        return not_signed_in_error(request)
+
     post_list = Post.objects.filter(user=user).order_by("-post_date")
     like_list = Like.objects.all()
     comment_list = Comment.objects.all()
@@ -36,12 +34,10 @@ def share(request, user_name):
 
 @csrf_exempt
 def post(request, user_name):
-    user = get_user(user_name)
+    user = get_user(user_name, request)
     if not user:
         return not_signed_in_error(request)
-    check_has_signed_in = has_signed_in(request, user)
-    if not check_has_signed_in:
-        return not_signed_in_error(request)
+
     if request.method == "POST":
         post_text = request.POST.get("post_text")
         post_text = remove_danger_symbols(post_text)
@@ -73,12 +69,10 @@ def post(request, user_name):
 
 @csrf_exempt
 def like(request, user_name, post_id):
-    user = get_user(user_name)
+    user = get_user(user_name, request)
     if not user:
         return not_signed_in_error(request)
-    check_has_signed_in = has_signed_in(request, user)
-    if not check_has_signed_in:
-        return not_signed_in_error(request)
+
     if request.method == "POST":
         try:
             Like.objects.get(liker=user_name, post_id=post_id)
@@ -95,12 +89,10 @@ def like(request, user_name, post_id):
 
 @csrf_exempt
 def comment(request, user_name, post_id):
-    user = get_user(user_name)
+    user = get_user(user_name, request)
     if not user:
         return not_signed_in_error(request)
-    check_has_signed_in = has_signed_in(request, user)
-    if not check_has_signed_in:
-        return not_signed_in_error(request)
+
     text = request.POST.get("text")
     text = remove_danger_symbols(text)
     if text:

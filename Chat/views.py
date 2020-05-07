@@ -1,11 +1,10 @@
-from django.core import serializers
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 
 from Account.models import User
-from Account.views import get_user, has_signed_in, not_signed_in_error
+from Account.views import get_user, not_signed_in_error
 
 from Share.views import remove_danger_symbols
 
@@ -13,11 +12,8 @@ from Chat.models import Friend, Message, Room
 
 
 def chat(request, user_name):
-    user = get_user(user_name)
+    user = get_user(user_name, request)
     if not user:
-        return not_signed_in_error(request)
-    check_has_signed_in = has_signed_in(request, user)
-    if not check_has_signed_in:
         return not_signed_in_error(request)
     friends = Friend.objects.filter(user=user).order_by('-id')
     context = {
@@ -31,11 +27,8 @@ def chat(request, user_name):
 @csrf_exempt
 def friend(request, user_name):
     if request.method == 'POST':
-        user = get_user(user_name)
+        user = get_user(user_name, request)
         if not user:
-            return not_signed_in_error(request)
-        check_has_signed_in = has_signed_in(request, user)
-        if not check_has_signed_in:
             return not_signed_in_error(request)
 
         friend_name = request.POST.get("username")
@@ -70,11 +63,8 @@ def friend(request, user_name):
 
 @csrf_exempt
 def messages(request, user_name, friend_name):
-    user = get_user(user_name)
+    user = get_user(user_name, request)
     if not user:
-        return not_signed_in_error(request)
-    check_has_signed_in = has_signed_in(request, user)
-    if not check_has_signed_in:
         return not_signed_in_error(request)
 
     friend = get_object_or_404(Friend, friend_name=friend_name, user=user)

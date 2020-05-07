@@ -6,5 +6,4 @@ urlpatterns = [
     path('', views.redirect_to_sign_in),
     path('sign_in/', views.sign_in, name='sign_in'),
     path('sign_up/', views.sign_up, name='sign_up'),
-    path('<user_name>/profile/', views.profile, name="<user_name>/profile"),
 ]
