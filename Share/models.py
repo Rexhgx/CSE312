@@ -8,7 +8,7 @@ from django.conf import settings
 def post_photo_path(instance, filename):
     random_number = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
     filename = random_number + filename
-    return '/'.join(['share', instance.user.user_name, filename])
+    return '/'.join(['share', instance.user.username, filename])
 
 
 class Post(models.Model):

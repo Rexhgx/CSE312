@@ -26,6 +26,7 @@ def share(request, user_name):
         context = {
             "title": "share",
             "user_name": user_name,
+            "user_photo": user.photo.url,
             "post_list": post_list,
             "like_list": like_list,
             "comment_list": comment_list,

@@ -20,6 +20,7 @@ def chat(request, user_name):
         "title": "chat",
         "user_name": user_name,
         "friends": friends,
+        "user_photo": user.photo.url,
     }
     return render(request, "chat.html", context=context)
 
@@ -41,7 +42,7 @@ def friend(request, user_name):
             # When the friend already exists
             error = "Sorry, you have added this friend."
         try:
-            friend = User.objects.get(user_name=friend_name)
+            friend = User.objects.get(username=friend_name)
         except:
             # When the friend does not exist
             error = "Sorry, please enter a valid username"

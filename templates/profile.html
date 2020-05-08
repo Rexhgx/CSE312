@@ -9,25 +9,63 @@
         <div class="card-container">
             <div class = "upper-container">
                 <div class="image-container">
-                    <img src="{% static "static/image/chat_and_share.png"%}" alt="Profile Photo">
+                    <img src="{{ user_photo }}" alt="Profile Photo">
                 </div>
             </div>
             <div class="lower-container">
                 <div class="user_name">
-                    <h3> Chat and Share</h3>
+                    <h3>{{ user_name }}</h3>
                 </div>
 
                 <div class="user_photo">
-                    <a href="#" class="btn">Change profile</a>
+                    <form id="update_form" enctype= multipart/form-data>
+                        {% csrf_token %}
+                        <input type="button" class="btn" value="Change profile">
+                        <input type="file" id="photo" name="photo" accept="image/*" style="display:none">
+                    </form>
                 </div>
 
                 <div class="lower-userinfo">
                     <ul class="data-user">
-                        <li><a><strong>{{ posts }}</strong><span> Posts</span></a></li>
-                        <li><a><strong>{{ friends }}</strong><span> Friends</span></a></li>
+                        <li>
+                            <a class="share_link" href="{% url "Share:<user_name>/share" user_name %}">
+                                <strong>{{ posts }}</strong>
+                                <span> Posts</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="chat_link" href="{% url "Chat:<user_name>/chat" user_name %}">
+                                <strong>{{ friends }}</strong>
+                                <span> Friends</span>
+                            </a>
+                        </li>
                    </ul>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+    const user_name = JSON.parse(document.getElementById("user_name").textContent);
+
+    $('.btn').click(function () {
+        $('#photo').trigger('click');
+    })
+
+    $('#photo').on('change', function (e) {
+        $.ajax({
+            type: "POST",
+            url: '/' + user_name  +'/profile',
+            data: new FormData($('#update_form')[0]),
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response)
+            }
+        })
+    })
+    </script>
 {% endblock %}
