@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
@@ -31,10 +32,7 @@ def profile(request, user_name):
         if user_form.is_valid():
             user.photo = user_form.cleaned_data['photo']
             user.save()
-            data = {
-                "photo": user.photo.url
-            }
-            print("!!!!!!!!!!!!!")
-            print(user.photo.url)
-        else:
-            print(user_form.errors)
+        data = {
+            "photo": user.photo.url
+        }
+        return JsonResponse(data)

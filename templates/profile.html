@@ -9,7 +9,7 @@
         <div class="card-container">
             <div class = "upper-container">
                 <div class="image-container">
-                    <img src="{{ user_photo }}" alt="Profile Photo">
+                    <img src="{{ user_photo }}" alt="Profile Photo" id="profile_photo">
                 </div>
             </div>
             <div class="lower-container">
@@ -63,7 +63,8 @@
             processData: false,
             contentType: false,
             success: function (response) {
-                console.log(response)
+                $('#profile_image').attr('src', response['photo'])
+                $('#profile_photo').attr('src', response['photo'])
             }
         })
     })
