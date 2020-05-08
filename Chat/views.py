@@ -71,6 +71,9 @@ def messages(request, user_name, friend_name):
     friend = get_object_or_404(Friend, friend_name=friend_name, user=user)
 
     if request.method == 'GET':
+        friend.last_message_color = "#5c5c5c"
+        friend.save()
+
         response = {"messages": [], "room": None}
 
         # Get messages between the user and a friend
@@ -95,6 +98,17 @@ def messages(request, user_name, friend_name):
         return JsonResponse(response, safe=False)
     elif request.method == 'POST':
         content = remove_danger_symbols(request.POST.get("content"))
+
+        # Store the last message between the user and the friend
+        friend.last_message = content
+        friend.last_message_color = "#5c5c5c"
+        friend.save()
+
+        temp_user = User.objects.get(username=friend_name)
+        temp_friend = get_object_or_404(Friend, friend_name=user_name, user=temp_user)
+        temp_friend.last_message = content
+        temp_friend.save()
+
         message = Message.objects.create(
             friend=friend,
             sender_name=user_name,

@@ -114,16 +114,31 @@
 }
 
 .text{
-    margin-left: 30px;
+    margin-left: 25px;
+    display: flex;
 }
 
-.text h6{
+.text h5{
     font-size: 20px;
     margin-top: 15px;
     color: #5c5c5c;
 }
 
-.text:hover h6 {
+.text h6{
+    width: 140px;
+    height: 30px;
+    font-size: 15px;
+    margin-top: 18px;
+    margin-left: 15px;
+    color: #5c5c5c;
+    overflow: hidden;
+}
+
+.text:hover h5{
+    color: white;
+}
+
+.text:hover h6{
     color: white;
 }
 
@@ -157,7 +172,6 @@
 .chat_box_topbar_text h6{
     font-size: 20px;
     margin-top: 15px;
-    color: #5c5c5c;
 }
 
 .chat_box_content {

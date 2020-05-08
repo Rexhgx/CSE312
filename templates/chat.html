@@ -16,9 +16,12 @@
         <div class="friends_information">
             {% for friend in friends %}
                 <div class="friends_drawer">
-                    <img src="{% static "static/image/chat_and_share.png"%}" alt="Friend Photo" class="friend_photo">
-                    <div class="text">
-                        <h6 class="friends_drawer_friend_name">{{ friend.friend_name }}</h6>
+                    <img src="{% static "static/image/chat_and_share.png"%}" alt="Friend  Photo" class="friend_photo">
+                    <div class="text" id="{{ friend.friend_name }}">
+                        <h5 class="friends_drawer_friend_name">{{ friend.friend_name }}</h5>
+                        <h6 class="friends_drawer_friend_last_message" style="color: {{ friend.last_message_color }}">
+                            {{ friend.last_message }}
+                        </h6>
                     </div>
                 </div>
             {% endfor %}
@@ -57,12 +60,38 @@
 {% block javascript %}
     <script>
         const user_name = JSON.parse(document.getElementById("user_name").textContent);
+        let current_friend_name = ""
 
-        let chatSocket = {}
-        let chat_content = $('#chat_box_content')[0];
+        const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            if (data.sender_name === user_name){
+                const friend_name = data.receiver_name
+                let last_message = $("#" + friend_name).children("h6")
+                last_message.text(data.content)
+                if (friend_name !== current_friend_name){
+                    last_message.css("color", "green")
+                }
+            }else if (data.receiver_name === user_name){
+                const friend_name = data.sender_name
+                let last_message = $("#" + friend_name).children("h6")
+                last_message.text(data.content)
+                if (friend_name !== current_friend_name){
+                    last_message.css("color", "green")
+                }
+            }
+        }
 
         chatSocket.onclose = function(e) {
-            console.error('Share socket closed unexpectedly');
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        let messageSocket = {}
+        let chat_content = $('#chat_box_content')[0];
+
+        messageSocket.onclose = function(e) {
+            console.error('Message socket closed unexpectedly');
         };
 
         $('.friends_topbar_add_new_friend_modal_container_submit').click(function (e) {
@@ -80,7 +109,9 @@
                         <div class="friends_drawer">
                             <img src="{% static "static/image/chat_and_share.png"%}" alt="Friend Photo" class="friend_photo">
                             <div class="text">
-                                <h6 class="friends_drawer_friend_name">${friend_name}</h6>
+                                <h5 class="friends_drawer_friend_name">${friend_name}</h5>
+                                <h6 class="friends_drawer_friend_last_message"></h6>
+                                <h4 class="friends_drawer_friend_notification"></h4>
                             </div>
                         </div>`
                         $('.friends_information').prepend(new_friend);
@@ -97,12 +128,15 @@
                 const friend_name = $(this).find('.friends_drawer_friend_name')[0].innerText;
                 $('.friend_photo').attr("src", friend_photo)
                 $('.chat_box_topbar_friend_name').text(friend_name)
+                current_friend_name = friend_name
+                $("#" + friend_name).children("h6").css("color", " #5c5c5c")
                 $('.chat_box_content').empty()
                 $('.chat_box_message_input').val("")
 
                 $.ajax({
                     type: 'GET',
                     url: '/' + user_name + '/' + friend_name +'/messages',
+                    data: {"current_friend_name": current_friend_name},
                     success: function (response) {
                         const messages = response["messages"]
                         const room = response["room"]
@@ -131,7 +165,7 @@
 
                         chat_content.scrollTop = chat_content.scrollHeight;
 
-                        chatSocket = new WebSocket(
+                        messageSocket = new WebSocket(
                             'ws://'
                             + window.location.host
                             + '/ws/chat/'
@@ -160,9 +194,13 @@
                         url: '/' + user_name + '/' + friend_name +'/messages',
                         data: {'content': content},
                         success: function (response) {
-                            console.log(response)
                             chatSocket.send(JSON.stringify({
-                                'operation': 'chat',
+                                'sender_name': response['sender_name'],
+                                'receiver_name': response['receiver_name'],
+                                'content': response['content'],
+                            }))
+
+                            messageSocket.send(JSON.stringify({
                                 'sender_name': response['sender_name'],
                                 'receiver_name': response['receiver_name'],
                                 'content': response['content'],
@@ -171,30 +209,28 @@
                         }
                     })
 
-                    chatSocket.onmessage = function(e) {
+                    messageSocket.onmessage = function(e) {
                         const data = JSON.parse(e.data);
-                        if (data.operation === 'chat'){
-                            let new_message = ''
-                            if(data.sender_name === user_name){
-                                new_message = `
-                                    <div class="chat_box_bubble">
-                                        <div class="chat_bubble_right">
-                                            ${data.content}
-                                        </div>
+                        let new_message = ''
+                        if(data.sender_name === user_name){
+                            new_message = `
+                                <div class="chat_box_bubble">
+                                    <div class="chat_bubble_right">
+                                        ${data.content}
                                     </div>
-                                `
-                            }else{
-                                new_message = `
-                                    <div class="chat_box_bubble">
-                                        <div class="chat_bubble_left">
-                                            ${data.content}
-                                        </div>
+                                </div>
+                            `
+                        }else{
+                            new_message = `
+                                <div class="chat_box_bubble">
+                                    <div class="chat_bubble_left">
+                                        ${data.content}
                                     </div>
-                                `
-                            }
-                            $('.chat_box_content').append(new_message);
-                            chat_content.scrollTop = chat_content.scrollHeight;
+                                </div>
+                            `
                         }
+                        $('.chat_box_content').append(new_message);
+                        chat_content.scrollTop = chat_content.scrollHeight;
                     };
                 }
             })
