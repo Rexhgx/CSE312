@@ -101,12 +101,13 @@ def messages(request, user_name, friend_name):
 
         # Store the last message between the user and the friend
         friend.last_message = content
-        friend.last_message_color = "#5c5c5c"
+        friend.last_message_color = "#008000"
         friend.save()
 
         temp_user = User.objects.get(username=friend_name)
         temp_friend = get_object_or_404(Friend, friend_name=user_name, user=temp_user)
         temp_friend.last_message = content
+        temp_friend.last_message_color = "#008000"
         temp_friend.save()
 
         message = Message.objects.create(

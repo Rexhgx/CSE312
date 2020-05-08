@@ -60,7 +60,6 @@
 {% block javascript %}
     <script>
         const user_name = JSON.parse(document.getElementById("user_name").textContent);
-        let current_friend_name = ""
 
         const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
 
@@ -128,7 +127,6 @@
                 const friend_name = $(this).find('.friends_drawer_friend_name')[0].innerText;
                 $('.friend_photo').attr("src", friend_photo)
                 $('.chat_box_topbar_friend_name').text(friend_name)
-                current_friend_name = friend_name
                 $("#" + friend_name).children("h6").css("color", " #5c5c5c")
                 $('.chat_box_content').empty()
                 $('.chat_box_message_input').val("")
@@ -136,7 +134,6 @@
                 $.ajax({
                     type: 'GET',
                     url: '/' + user_name + '/' + friend_name +'/messages',
-                    data: {"current_friend_name": current_friend_name},
                     success: function (response) {
                         const messages = response["messages"]
                         const room = response["room"]
