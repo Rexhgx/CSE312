@@ -1,10 +1,9 @@
 import uuid
 
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
-class User(models.Model):
-    user_name = models.CharField(max_length=16, unique=True)
-    user_password = models.CharField(max_length=16)
-    user_token = models.UUIDField(default=uuid.uuid4)
+class User(AbstractUser):
+    token = models.UUIDField(default=uuid.uuid4)
 

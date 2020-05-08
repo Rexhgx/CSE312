@@ -1,10 +1,9 @@
 from django.db import models
-
-from Account.models import User
+from django.conf import settings
 
 
 class Friend(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     friend_name = models.CharField(max_length=16)
 
 
