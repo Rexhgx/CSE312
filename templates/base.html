@@ -14,11 +14,11 @@
             <!-- User box (contain basic user information and links to chat/share/profile page -->
             <div class="user">
                 <div class="information">
-                    <img class="profile_image"  src="{% static "static/image/chat_and_share.png"%}" alt="Profile Image">
+                    <img class="profile_image"  src="{{ user_photo }}" alt="Profile Image" id="profile_image">
                     <h4 class="username">{{ user_name }}</h4>
                 </div>
                 <div class="link">
-                    <a href="{% url "Account:<user_name>/chat" user_name %}" class="chat_link">
+                    <a href="{% url "Chat:<user_name>/chat" user_name %}" class="chat_link">
                         <div class="chat_content">
                             <img class="chat_icon" src="{% static "static/image/chat_icon.svg"%}" alt="Chat Icon">
                             <span class="chat">chat</span>
@@ -30,10 +30,16 @@
                             <span class="share">share</span>
                         </div>
                     </a>
-                    <a href="{% url "Account:<user_name>/profile" user_name %}" class="profile_link">
+                    <a href="{% url "Profile:<user_name>/profile" user_name %}" class="profile_link">
                         <div class="profile_content">
                             <img class="profile_icon" src="{% static "static/image/profile_icon.svg"%}" alt="Profile Icon">
                             <span class="profile">profile</span>
+                        </div>
+                    </a>
+                    <a href="{% url "Account:<user_name>/sign_out" user_name %}" class="sign_out_link">
+                        <div class="sign_out_content">
+                            <img class="sign_out_icon" src="{% static "static/image/sign_out_icon.svg"%}" alt="Sign out Icon">
+                            <span class="sign_out">sign out</span>
                         </div>
                     </a>
                 </div>
@@ -43,6 +49,7 @@
             {% endblock %}
         </div>
     {% endif %}
+    {{ user_name|json_script:"user_name" }}
 
     <script>
         const modal = document.getElementsByClassName('share_topbar_add_new_post_modal');

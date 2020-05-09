@@ -15,7 +15,8 @@
             {% for post in post_list %}
                 <div class="share_box_post" id="{{post.id}}">
                     <div class="share_box_post_user">
-                        <img src="{% static "static/image/chat_and_share.png"%}" alt="User Photo" class="share_box_user_photo">
+                        <img src="{{ user_photo }}" alt="User Photo" class="share_box_user_photo">
+                        <h4 class="share_box_user_name">{{ user_name }}</h4>
                     </div>
                     <div class="share_box_post_text">
                         <h4 class="share_box_post_text_username"></h4>
@@ -78,16 +79,15 @@
 {% endblock %}
 
 {% block javascript %}
-    {{ user_name|json_script:"user_name" }}
     <script>
 
-    const userName = JSON.parse(document.getElementById("user_name").textContent);
+    const user_name = JSON.parse(document.getElementById("user_name").textContent);
 
     const shareSocket = new WebSocket(
         'ws://'
         + window.location.host
         + '/ws/'
-        + userName
+        + user_name
         + '/share/'
     );
 
@@ -111,9 +111,6 @@
     shareSocket.onclose = function (e) {
         console.error('Share socket closed unexpectedly');
     };
-
-
-
 
     $('.share_topbar_add_new_post_modal_content').submit(function(e){
         e.preventDefault();
@@ -157,7 +154,7 @@
         })
         .delegate('.share_box_post_button', 'click', function () {
         const post_id = $(this).parent().parent().parent().attr("id");
-        const post_url = '/' + userName + '/share/' + post_id + '/like';
+        const post_url = '/' + user_name + '/share/' + post_id + '/like';
         $.ajax({
                type: "POST",
                url: post_url,
@@ -173,8 +170,7 @@
         })
         .delegate('.comment_submit', 'click', function () {
             const post_id = $(this).parent().parent().parent().parent().attr("id");
-            console.log(post_id)
-            const post_url = '/' + userName + '/share/' + post_id + '/comment';
+            const post_url = '/' + user_name + '/share/' + post_id + '/comment';
             const comment_text = $(this).siblings("textarea").val();
             $.ajax({
             type: "POST",
@@ -199,7 +195,7 @@
         let new_post =  `
          <div class="share_box_post" id=${post_id.toString()}>
             <div class="share_box_post_user">
-                    <img src="{% static "static/image/chat_and_share.png"%}" alt="User Photo" class="share_box_user_photo">
+                    <img src="{{ user_photo }}" alt="User Photo" class="share_box_user_photo">
             </div>
             <div class="share_box_post_text">
                 <h4 class="share_box_post_text_username"></h4>

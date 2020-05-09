@@ -14,9 +14,8 @@ services:
       MYSQL_ROOT_PASSWORD: 'change_me'
   web:
     build: .
-    command: >
-      bash -c "python manage.py migrate
-      && python manage.py runserver 0.0.0.0:8000"
+    image: cse312
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/CSE312
     environment:
@@ -24,6 +23,8 @@ services:
       - MYSQL_PASSWORD=change_me
     ports:
       - "8000:8000"
-    links:
+    depends_on:
       - db
       - redis
+
+

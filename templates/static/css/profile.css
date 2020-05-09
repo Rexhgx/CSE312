@@ -44,14 +44,15 @@
 .lower-container .data-user li a:hover span {
   color: rgba(150, 196, 172, 0.67);
 }
+
 .lower-container .data-user {
-	font-family: "Quicksand", sans-serif;
-  margin-bottom: 0;
-  cursor: pointer;
-  padding: 0;
-  list-style: none;
-  display: table;
-  width: 100.15%;
+    font-family: "Quicksand", sans-serif;
+    margin-bottom: 0;
+    cursor: pointer;
+    padding: 0;
+    list-style: none;
+    display: table;
+    width: 100.15%;
 }
 
 
@@ -72,20 +73,20 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    box-shadow: 0px 1px 10px 1px #000;
     display: inline-block;
     overflow: hidden;
-    display: inline-block;
 }
+
 .upper-container{
     height: 150px;
     background: rgba(150, 196, 172, 0.67);
 }
+
 .image-container img{
     background: white;
     width: 100px;
     height: 100px;
-    border-radius: 50%;
+    border-radius: 25px;
     position: absolute;
     transform: translate(300px,90px);
 }
@@ -97,34 +98,49 @@
     padding-top: 40px;
     text-align: center;
 }
+
 .lower-container h3, h4{
     box-sizing: border-box;
     line-height: .6;
     font-weight: lighter;
+    font-size: 30px;
 }
+
 .lower-container h4{
     color: rgba(150, 196, 172, 0.67);
     opacity: .6;
     font-weight: bold;
 }
+
 .lower-container p{
     font-size: 16px;
     color: gray;
     margin-bottom: 30px;
 }
+
 .lower-container .btn{
     padding: 12px 20px;
     background: rgba(150, 196, 172, 0.67);
     border: none;
     color: white;
     border-radius: 30px;
-    font-size: 12px;
+    font-size: 18px;
     text-decoration: none;
     font-weight: bold;
     transition: all .3s ease-in;
 }
+
 .lower-container .btn:hover{
     background: transparent;
     color: rgba(150, 196, 172, 0.67);
     border: 2px solid rgba(150, 196, 172, 0.67);
+}
+
+.btn:after, .btn:focus, .btn:active {
+    box-shadow: none;
+    outline: none;
+}
+
+.user_name, .user_photo, .data-user {
+    margin-top: 30px;
 }

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block css %}
-    <link href="{% static %}" rel="stylesheet" type="text/css">
+    <link href="{% static "static/css/profile.css"%}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block content %}
@@ -9,28 +9,64 @@
         <div class="card-container">
             <div class = "upper-container">
                 <div class="image-container">
-                    <img src="{% static %}">
+                    <img src="{{ user_photo }}" alt="Profile Photo" id="profile_photo">
                 </div>
             </div>
             <div class="lower-container">
-                <div>
-                    <h3> Chat and Share</h3>
-                    <h4> project</h4>
+                <div class="user_name">
+                    <h3>{{ user_name }}</h3>
                 </div>
-                <div>
-                    <p>dfjijeofjwlkjdlkfjoidjfoijweof</p>
+
+                <div class="user_photo">
+                    <form id="update_form" enctype= multipart/form-data>
+                        {% csrf_token %}
+                        <input type="button" class="btn" value="Change profile">
+                        <input type="file" id="photo" name="photo" accept="image/*" style="display:none">
+                    </form>
                 </div>
-                <div>
-                    <a href="#" class="btn">Change profile</a>
-                </div>
-                <div class = "lower-userinfo">
+
+                <div class="lower-userinfo">
                     <ul class="data-user">
-                        <li><a><strong>3390</strong><span>Posts</span></a></li>
-                        <li><a><strong>718</strong><span>Followers</span></a></li>
-                        <li><a><strong>239</strong><span>Following</span></a></li>
+                        <li>
+                            <a class="share_link" href="{% url "Share:<user_name>/share" user_name %}">
+                                <strong>{{ posts }}</strong>
+                                <span> Posts</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="chat_link" href="{% url "Chat:<user_name>/chat" user_name %}">
+                                <strong>{{ friends }}</strong>
+                                <span> Friends</span>
+                            </a>
+                        </li>
                    </ul>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+    const user_name = JSON.parse(document.getElementById("user_name").textContent);
+
+    $('.btn').click(function () {
+        $('#photo').trigger('click');
+    })
+
+    $('#photo').on('change', function (e) {
+        $.ajax({
+            type: "POST",
+            url: '/' + user_name  +'/profile',
+            data: new FormData($('#update_form')[0]),
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                $('#profile_image').attr('src', response['photo'])
+                $('#profile_photo').attr('src', response['photo'])
+            }
+        })
+    })
+    </script>
 {% endblock %}
