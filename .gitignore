@@ -2,6 +2,6 @@ venv
 db.sqlite3
 .idea
 __pycache__/
-*/migrations
 Project/settings.py
-templates/static/image
+templates/static/image/profile
+templates/static/image/share

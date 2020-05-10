@@ -39,7 +39,6 @@ class MessageConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    # Receive message from room group (chat)
     async def add_message(self, event):
         sender_name = event['sender_name']
         receiver_name = event['receiver_name']
@@ -88,7 +87,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    # Receive message from room group (chat)
     async def create_notification(self, event):
         sender_name = event['sender_name']
         receiver_name = event['receiver_name']
